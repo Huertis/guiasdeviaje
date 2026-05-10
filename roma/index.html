@@ -1021,785 +1021,595 @@ input, textarea, select { font-family: inherit; font-size: 16px; }
      ========================================================= -->
 <script type="application/json" id="guide-data">
 {
+  "schema_version": "1.2",
   "meta": {
     "title": "Roma · Junio 2026",
-    "destination": "Roma, Italia",
-    "origin": "Valencia, España",
-    "dates": "6–9 junio 2026",
-    "travelers": 2,
-    "travel_style": "Intenso · Historia y arqueología · Barrios y terrazas",
-    "currency": "EUR",
-    "cover_image": "cover.jpg",
-    "total_estimated": {
-      "amount": 700,
+    "subtitle": "Trastevere, historia y terrazas",
+    "destination": {
+      "name": "Roma",
+      "country": "Italia",
+      "region": "Lacio"
+    },
+    "origin": {
+      "city": "Valencia",
+      "country": "España"
+    },
+    "dates": {
+      "start": "2026-06-06",
+      "end": "2026-06-09",
+      "days": 4
+    },
+    "travelers": {
+      "adults": 2,
+      "children": 0
+    },
+    "budget": {
+      "level": "medio",
+      "total_estimated": 700,
       "breakdown": {
-        "Vuelos (ya pagados)": "200 € (100 € × 2)",
-        "Alojamiento (ya pagado)": "300 €",
-        "Museos y entradas": "~60 €",
-        "Comidas y cenas": "~220 €",
-        "Transporte aeropuerto": "~32 €",
-        "Transporte urbano": "~20 €",
-        "Varios y compras": "~50 €"
-      },
-      "verified_at": "2026-05-10",
-      "notes": "El total ya pagado asciende a 500 €. El gasto estimado pendiente es de ~200 € por persona. Los precios de museos y restaurantes son orientativos; verifica in situ."
-    }
+        "flights": 200,
+        "accommodation": 300,
+        "transport": 52,
+        "food": 220,
+        "activities": 75,
+        "shopping": 50,
+        "other": 30
+      }
+    },
+    "interests": ["Historia y arqueología", "Vida nocturna y terrazas", "Barrios y callejeo"],
+    "transport": {
+      "to_destination": "avion",
+      "on_site": ["metro", "bus", "a_pie"]
+    },
+    "language": "es",
+    "currency": "EUR",
+    "cover_image": "cover.jpg"
   },
-  "summary": [
-    { "day": 1, "summary": "Tarde de llegada, primera impresión del Trastevere y cena en el barrio más auténtico de Roma." },
-    { "day": 2, "summary": "Vaticano completo: Museos, Capilla Sixtina y Basílica de San Pedro. Tarde libre en el barrio." },
-    { "day": 3, "summary": "Domingo gratuito: Panteón, Coliseo, Foro Romano y Palatino sin pagar entrada. Noche en Trastevere." },
-    { "day": 4, "summary": "Última mañana romana: mercado, callejeo y vuelta a Valencia." }
-  ],
-  "history": {
-    "summary": "Roma no es simplemente una ciudad: es una acumulación de siglos superpuestos donde cada adoquín esconde una historia. Caminar por el Trastevere —vuestro barrio base— es pisar el suelo que pisaron obreros, artesanos y gladiadores. Y el Coliseo, que visitaréis el domingo de forma gratuita, lleva en pie casi dos mil años como testigo mudo de la ambición humana.",
-    "periods": [
+  "intro": {
+    "narrative": "Cuatro días entre los adoquines de la Ciudad Eterna: Trastevere como base, el Vaticano el sábado, el Coliseo y el Panteón gratis el domingo, y los mercados romanos el lunes antes de volver a Valencia.",
+    "value_props": [
       {
-        "title": "La Roma Republicana (509–27 a.C.)",
-        "text": "Antes de emperadores y gladiadores, Roma fue una república gobernada por el Senado desde el Foro Romano —que recorreréis el domingo de vuestra estancia—. El Foro no era solo un espacio político: era el corazón comercial, judicial y social de una ciudad que en el siglo I a.C. ya superaba el millón de habitantes. Julio César fue asesinado en los idus de marzo del 44 a.C. en los escalones del Teatro de Pompeyo, a apenas diez minutos a pie de vuestro alojamiento en el Trastevere. El barrio donde os alojaréis nació precisamente en esta época: *Trans Tiberim*, «al otro lado del Tíber», era entonces una zona de almacenes, talleres y trabajadores llegados de Oriente —sirios, judíos, griegos— que dotaron al barrio de ese carácter mestizo y bohemio que conserva hasta hoy. La comunidad judía romana, una de las más antiguas del mundo, se estableció en las inmediaciones hace más de dos milenios, y su huella es aún visible en el vecino Ghetto Ebraico."
+        "icon": "🏟️",
+        "title": "Coliseo y Panteón gratis",
+        "text": "El primer domingo del mes todos los museos estatales son de entrada libre. Ahorro de más de 46 € entre las dos."
       },
       {
-        "title": "El Imperio y el Coliseo (27 a.C.–476 d.C.)",
-        "text": "El 80 d.C. marcó uno de los momentos más espectaculares de la historia romana: la inauguración del Coliseo —Anfiteatro Flavio—, que visitaréis el domingo 8 de junio gratuitamente gracias a la Domenica al Museo. El emperador Tito lo inauguró con cien días de juegos ininterrumpidos en los que se dice murieron cinco mil animales y decenas de gladiadores. Con capacidad para más de cincuenta mil espectadores, la estructura de travertino, hormigón romano y mármol es un prodigio de ingeniería que inspiró estadios hasta el siglo XX. Justo al lado, el Foro Romano que formaréis en la entrada combinada fue durante siglos el centro del mundo conocido: ahí se promulgaron las leyes, se celebraron los triunfos militares y se enterraron los grandes hombres. El Monte Palatino, que también cubre vuestra entrada, es donde según la tradición Rómulo fundó la ciudad y donde después los emperadores construyeron sus palacios. Julio César, Augusto, Nerón y Adriano caminaron por esas piedras que hoy pisaréis vosotras. Y en plena época imperial, el emperador Adriano encargó también la reconstrucción del Panteón —visita gratuita ese mismo domingo— que hoy podemos contemplar casi intacto desde el año 126 d.C., con su cúpula de 43 metros que durante más de mil trescientos años fue la mayor del mundo."
+        "icon": "🎨",
+        "title": "Vaticano el sábado",
+        "text": "Museos Vaticanos y Capilla Sixtina reservados con antelación para evitar colas de hasta 3 horas."
       },
       {
-        "title": "La Roma Cristiana y Medieval (siglos IV–XIV)",
-        "text": "Cuando el emperador Constantino legalizó el cristianismo en el año 313, Roma comenzó a transformarse radicalmente. Las antiguas basílicas civiles del Foro se convirtieron en iglesias, los templos paganos fueron consagrados a vírgenes y santos, y el Panteón —vuestro destino del domingo— fue cedido al Papa Bonifacio IV en el año 609, convirtiéndose en la Basílica de Santa María ad Martyres. Fue precisamente esta conversión lo que lo salvó de ser desguazado como el resto de monumentos clásicos. El Trastevere, vuestro barrio, alberga la Basílica de Santa María in Trastevere, una de las más antiguas de Roma, cuyo origen se remonta al siglo III. La iglesia que hoy podéis admirar data en gran parte del siglo XII y sus mosaicos son considerados entre los más hermosos del arte cristiano medieval. Durante la Edad Media, Roma perdió la mitad de su población y el Foro Romano quedó tan abandonado que los romanos empezaron a llamarlo el «Campo Vaccino», el campo de las vacas, porque los animales pastaban entre las columnas de lo que había sido el centro del mundo."
+        "icon": "🍝",
+        "title": "Base en el Trastevere",
+        "text": "El barrio más auténtico de Roma: trattorias centenarias, plazas bohemias y la mejor vida nocturna de la ciudad."
       },
       {
-        "title": "El Renacimiento y el Vaticano (siglos XV–XVII)",
-        "text": "Los Papas del Renacimiento convirtieron Roma en la mayor obra de arte de la historia. Cuando el sábado 7 de junio visitéis los Museos Vaticanos y la Capilla Sixtina, estaréis contemplando el fruto de décadas de mecenazgo sin parangón. Sixto IV encargó la Capilla Sixtina en 1473; Julio II encomendó a Miguel Ángel pintarla entre 1508 y 1512 —un trabajo que el artista realizó casi solo, tumbado sobre andamios, sufriendo dolores de cuello y espalda que describiría en cartas desesperadas—. El resultado, el fresco de La Creación de Adán y el Juicio Final, es probablemente la obra más contemplada de la historia del arte. Los Museos Vaticanos reúnen más de cincuenta y cuatro galerías creadas por sucesivos pontífices como contenedores de la mayor colección de arte antiguo del mundo. La Basílica de San Pedro, cuya cúpula podéis ver desde gran parte de Roma, fue diseñada entre otros por Miguel Ángel, Bramante y Bernini, y su construcción duró más de ciento veinte años. La Plaza de San Pedro, con sus columnatas de Bernini abrazando simbólicamente a los fieles, no se terminó hasta 1667."
-      },
-      {
-        "title": "El Gran Tour y la Roma Romántica (siglos XVIII–XIX)",
-        "text": "En el siglo XVIII, Roma se convirtió en la meta obligada del «Grand Tour» europeo: jóvenes aristócratas ingleses, alemanes y españoles peregrinaban a la Ciudad Eterna para completar su educación. Fue en este periodo cuando los grandes monumentos que visitaréis adquirieron su aura romántica: el Coliseo, cubierto de hiedra y frecuentado por pastores, fascinó a Byron, Shelley y Goethe. La Fontana di Trevi, que podréis ver paseando por el centro, fue terminada en 1762 por Nicola Salvi bajo el patrocinio del papa Clemente XII y se convirtió de inmediato en uno de los iconos más fotografiados del mundo. El Trastevere era en esta época un barrio obrero, ruidoso y auténtico, muy distinto a los bulevares aristocráticos del centro: precisamente por eso artistas y bohemios lo frecuentaban, estableciendo la reputación de barrio de creadores que conserva hasta hoy."
-      },
-      {
-        "title": "La Roma Moderna y el Trastevere Contemporáneo (siglo XX–hoy)",
-        "text": "En 1870, con la unificación de Italia, Roma pasó a ser capital del nuevo estado y experimentó una transformación urbana masiva: se abrieron grandes bulevares, se demolieron barrios medievales y se construyeron edificios ministeriales. El Trastevere sobrevivió gracias a su marginalidad: demasiado popular, demasiado laberíntico para ser «modernizado». En el siglo XX el barrio atrajo a la comunidad artística e intelectual romana, y hoy es el epicentro de la vida nocturna de la ciudad. Las pequeñas plazas con mesas en la calle que encontraréis al salir de cenar son herederas directas de esa tradición: el «dolce far niente» romano no es un tópico turístico sino una forma de vida que lleva siglos perfeccionándose entre estas mismas fachadas ocres. El viaje entre Valencia y Roma que hacéis en apenas dos horas habría requerido semanas de navegación a los comerciantes valencianos del siglo XV que frecuentaban los puertos del Mediterráneo. Vosotras lo haréis en avión y aterrizaréis en un Fiumicino construido para las Olimpiadas de 1960 —las mismas en que el maratoniano etíope Abebe Bikila corrió descalzo y ganó el oro pasando por el arco de Constantino, justo al lado del Coliseo que visitaréis."
+        "icon": "☀️",
+        "title": "Junio perfecto",
+        "text": "18-28 °C, más de 9 horas de sol al día y probabilidad de lluvia mínima. El mejor clima para visitar Roma."
       }
     ]
   },
+  "history": {
+    "title": "Contexto histórico",
+    "summary": "Roma no es simplemente una ciudad: es una acumulación de siglos superpuestos donde cada adoquín esconde una historia. Caminar por el Trastevere —vuestro barrio base— es pisar el suelo que pisaron obreros, artesanos y gladiadores hace dos mil años. Y el Coliseo, que visitaréis el domingo de forma gratuita, lleva en pie casi dos milenios como testigo mudo de la ambición humana.",
+    "periods": [
+      {
+        "range": "509–27 a.C.",
+        "title": "La Roma Republicana",
+        "text": "Antes de emperadores y gladiadores, Roma fue una república gobernada por el Senado desde el Foro Romano, que recorreréis el domingo de vuestra estancia. El Foro no era solo un espacio político: era el corazón comercial, judicial y social de una ciudad que en el siglo I a.C. ya superaba el millón de habitantes. Julio César fue asesinado en los idus de marzo del 44 a.C. en los escalones del Teatro de Pompeyo, a apenas diez minutos a pie de vuestro alojamiento en el Trastevere. El barrio donde os alojaréis nació precisamente en esta época: Trans Tiberim, al otro lado del Tíber, era entonces una zona de almacenes, talleres y trabajadores llegados de Oriente —sirios, judíos, griegos— que dotaron al barrio de ese carácter mestizo y bohemio que conserva hasta hoy. La comunidad judía romana, una de las más antiguas del mundo, se estableció en las inmediaciones hace más de dos milenios, y su huella es aún visible en el vecino Ghetto Ebraico."
+      },
+      {
+        "range": "27 a.C.–476 d.C.",
+        "title": "El Imperio y el Coliseo",
+        "text": "El 80 d.C. marcó uno de los momentos más espectaculares de la historia romana: la inauguración del Coliseo —Anfiteatro Flavio—, que visitaréis el domingo 8 de junio gratuitamente. El emperador Tito lo inauguró con cien días de juegos ininterrumpidos en los que se dice murieron cinco mil animales y decenas de gladiadores. Con capacidad para más de cincuenta mil espectadores, la estructura de travertino, hormigón romano y mármol es un prodigio de ingeniería que inspiró estadios hasta el siglo XX. El Foro Romano que recorreréis ese mismo día fue durante siglos el centro del mundo conocido: ahí se promulgaron las leyes, se celebraron los triunfos militares y se enterraron los grandes hombres. Y en plena época imperial, el emperador Adriano encargó la reconstrucción del Panteón —también gratuito ese domingo— que hoy podemos contemplar casi intacto desde el año 126 d.C., con su cúpula de 43 metros que durante más de mil trescientos años fue la mayor del mundo."
+      },
+      {
+        "range": "Siglos IV–XIV",
+        "title": "La Roma Cristiana y Medieval",
+        "text": "Cuando el emperador Constantino legalizó el cristianismo en el año 313, Roma comenzó a transformarse radicalmente. Las antiguas basílicas civiles del Foro se convirtieron en iglesias, los templos paganos fueron consagrados a vírgenes y santos, y el Panteón fue cedido al Papa Bonifacio IV en el año 609, convirtiéndose en la Basílica de Santa María ad Martyres. Fue precisamente esta conversión lo que lo salvó de ser desguazado. El Trastevere alberga la Basílica de Santa María in Trastevere, una de las más antiguas de Roma: su origen se remonta al siglo III y sus mosaicos del siglo XII son considerados entre los más hermosos del arte cristiano medieval. Durante la Edad Media, Roma perdió la mitad de su población y el Foro Romano quedó tan abandonado que los romanos empezaron a llamarlo el Campo Vaccino, el campo de las vacas, porque los animales pastaban entre las columnas de lo que había sido el centro del mundo."
+      },
+      {
+        "range": "Siglos XV–XVII",
+        "title": "El Renacimiento y el Vaticano",
+        "text": "Los Papas del Renacimiento convirtieron Roma en la mayor obra de arte de la historia. Cuando el sábado 7 de junio visitéis los Museos Vaticanos y la Capilla Sixtina, estaréis contemplando el fruto de décadas de mecenazgo sin parangón. Sixto IV encargó la Capilla Sixtina en 1473; Julio II encomendó a Miguel Ángel pintarla entre 1508 y 1512, un trabajo que el artista realizó casi solo, tumbado sobre andamios, sufriendo dolores de cuello y espalda que describiría en cartas desesperadas. El resultado —el fresco de La Creación de Adán y el Juicio Final— es probablemente la obra más contemplada de la historia del arte. La Basílica de San Pedro, cuya cúpula podéis ver desde gran parte de Roma, fue diseñada entre otros por Miguel Ángel, Bramante y Bernini, y su construcción duró más de ciento veinte años."
+      },
+      {
+        "range": "Siglos XVIII–XIX",
+        "title": "El Grand Tour y la Roma Romántica",
+        "text": "En el siglo XVIII, Roma se convirtió en la meta obligada del Grand Tour europeo: jóvenes aristócratas ingleses, alemanes y españoles peregrinaban a la Ciudad Eterna para completar su educación. Fue en este periodo cuando los grandes monumentos que visitaréis adquirieron su aura romántica: el Coliseo, cubierto de hiedra y frecuentado por pastores, fascinó a Byron, Shelley y Goethe. La Fontana di Trevi, que podréis ver paseando por el centro, fue terminada en 1762 por Nicola Salvi bajo el patrocinio del papa Clemente XII. El Trastevere era en esta época un barrio obrero, ruidoso y auténtico, muy distinto a los bulevares aristocráticos del centro: precisamente por eso artistas y bohemios lo frecuentaban, estableciendo la reputación de barrio de creadores que conserva hasta hoy."
+      },
+      {
+        "range": "Siglo XX–hoy",
+        "title": "La Roma Moderna y el Trastevere Contemporáneo",
+        "text": "En 1870, con la unificación de Italia, Roma pasó a ser capital del nuevo estado y experimentó una transformación urbana masiva. El Trastevere sobrevivió gracias a su marginalidad: demasiado popular, demasiado laberíntico para ser modernizado. En el siglo XX el barrio atrajo a la comunidad artística e intelectual romana, y hoy es el epicentro de la vida nocturna de la ciudad. Las pequeñas plazas con mesas en la calle que encontraréis al salir de cenar son herederas directas de esa tradición: el dolce far niente romano no es un tópico turístico sino una forma de vida que lleva siglos perfeccionándose entre estas mismas fachadas ocres. El aeropuerto de Fiumicino donde aterrizaréis fue construido para las Olimpiadas de Roma de 1960, las mismas en que el maratoniano etíope Abebe Bikila corrió descalzo y ganó el oro pasando por el arco de Constantino, justo al lado del Coliseo."
+      }
+    ]
+  },
+  "overview_map": {
+    "center": { "lat": 41.8967, "lng": 12.4722 },
+    "zoom": 13,
+    "markers": [
+      { "day": 1, "name": "Trastevere – llegada y primer paseo", "coords": { "lat": 41.8895, "lng": 12.4697 } },
+      { "day": 2, "name": "Museos Vaticanos", "coords": { "lat": 41.9065, "lng": 12.4536 } },
+      { "day": 2, "name": "Castel Sant'Angelo", "coords": { "lat": 41.9031, "lng": 12.4663 } },
+      { "day": 2, "name": "Piazza Navona", "coords": { "lat": 41.8992, "lng": 12.4731 } },
+      { "day": 3, "name": "Panteón de Agripa", "coords": { "lat": 41.8986, "lng": 12.4769 } },
+      { "day": 3, "name": "Fontana di Trevi", "coords": { "lat": 41.9009, "lng": 12.4833 } },
+      { "day": 3, "name": "Coliseo", "coords": { "lat": 41.8902, "lng": 12.4922 } },
+      { "day": 3, "name": "Foro Romano", "coords": { "lat": 41.8925, "lng": 12.4853 } },
+      { "day": 4, "name": "Campo de Fiori", "coords": { "lat": 41.8955, "lng": 12.4722 } }
+    ]
+  },
+  "summary": [
+    { "day": 1, "date": "2026-06-06", "title": "Llegada al Trastevere", "summary": "Tarde de llegada, primera impresión del barrio más auténtico de Roma y cena en trattoria local." },
+    { "day": 2, "date": "2026-06-07", "title": "El Vaticano", "summary": "Museos Vaticanos, Capilla Sixtina y Basílica de San Pedro. Tarde: Castel Sant'Angelo y Piazza Navona." },
+    { "day": 3, "date": "2026-06-08", "title": "Domenica al Museo · Todo gratis", "summary": "Primer domingo del mes: Panteón, Coliseo, Foro Romano y Palatino sin pagar entrada. Noche en Trastevere." },
+    { "day": 4, "date": "2026-06-09", "title": "Última mañana romana", "summary": "Mercado de Campo de Fiori, Ghetto Ebraico y vuelta a Valencia." }
+  ],
   "days": [
     {
       "day": 1,
-      "date": "Viernes 6 junio 2026",
+      "date": "2026-06-06",
       "title": "Llegada al Trastevere",
-      "theme": "Primera tarde romana",
-      "cover_emoji": "✈️",
       "timeline": [
-        {
-          "time": "15:15",
-          "title": "Salida de Valencia (VLC)",
-          "description": "Vuelo desde el Aeropuerto de Valencia. Llegada prevista a Roma Fiumicino (FCO) a las 17:20 hora italiana.",
-          "type": "transport",
-          "icon": "✈️"
-        },
-        {
-          "time": "17:20",
-          "title": "Llegada a Roma Fiumicino",
-          "description": "Recogida de equipaje y traslado al Trastevere. Opción recomendada: tren regional FL1 hasta estación Roma Trastevere (8 €/persona, ~40 min). Validar el billete antes de subir al tren.",
-          "type": "transport",
-          "icon": "🚂"
-        },
-        {
-          "time": "18:30",
-          "title": "Check-in en el Airbnb",
-          "description": "Instalación en el alojamiento del Trastevere. Dejad el equipaje y preparaos para explorar el barrio.",
-          "type": "logistics",
-          "icon": "🏠"
-        },
-        {
-          "time": "19:00",
-          "title": "Primer paseo por el Trastevere",
-          "description": "Callejeo libre por el barrio: Plaza Santa Maria in Trastevere, Via della Scala, Piazza Trilussa. El objetivo de esta tarde es empaparte del ambiente, no marcar monumentos.",
-          "type": "activity",
-          "icon": "🚶‍♀️"
-        },
-        {
-          "time": "20:30",
-          "title": "Aperitivo en Piazza Trilussa",
-          "description": "Las terrazas de esta plaza son ideales para el aperitivo romano: Spritz o vino blanco con supplì. Una iniciación perfecta al ritmo de la ciudad.",
-          "type": "food",
-          "icon": "🍷"
-        },
-        {
-          "time": "21:30",
-          "title": "Cena: Tonnarello",
-          "description": "Uno de los restaurantes más queridos del Trastevere desde el siglo XIX. La pasta se sirve en la propia sartén. La cacio e pepe y la carbonara son imprescindibles. Precio medio 18-22 €/persona.",
-          "type": "food",
-          "icon": "🍝"
-        }
+        { "time": "15:15", "icon": "✈️", "title": "Salida de Valencia (VLC)", "description": "Vuelo desde el Aeropuerto de Valencia. Llegada prevista a Roma Fiumicino (FCO) a las 17:20 hora italiana.", "type": "transport" },
+        { "time": "17:20", "icon": "🚂", "title": "Llegada a Roma Fiumicino", "description": "Recogida de equipaje y traslado al Trastevere. Opción recomendada: tren regional FL1 hasta estación Roma Trastevere (8 €/persona, ~40 min). Validar el billete antes de subir.", "type": "transport" },
+        { "time": "18:30", "icon": "🏠", "title": "Check-in en el Airbnb", "description": "Instalación en el alojamiento del Trastevere. Dejad el equipaje y preparaos para explorar el barrio.", "type": "checkin" },
+        { "time": "19:00", "icon": "🚶‍♀️", "title": "Primer paseo por el Trastevere", "description": "Callejeo libre por el barrio: Plaza Santa Maria in Trastevere, Via della Scala, Piazza Trilussa. El objetivo de esta tarde es empaparse del ambiente, no marcar monumentos.", "type": "free", "place_id": "trastevere-plaza" },
+        { "time": "20:30", "icon": "🍷", "title": "Aperitivo en Piazza Trilussa", "description": "Las terrazas de esta plaza son ideales para el aperitivo romano: Spritz o vino blanco con supplì. Una iniciación perfecta al ritmo de la ciudad.", "type": "meal", "place_id": "trilussa" },
+        { "time": "21:30", "icon": "🍝", "title": "Cena: Tonnarello", "description": "Uno de los restaurantes más queridos del Trastevere desde el siglo XIX. La pasta se sirve en la propia sartén. La cacio e pepe y la carbonara son imprescindibles. Precio medio 18–22 €/persona.", "type": "meal" }
       ],
       "places": [
         {
+          "id": "trastevere-plaza",
           "name": "Basílica de Santa María in Trastevere",
-          "type": "Iglesia",
-          "description": "Una de las iglesias más antiguas de Roma (siglo III). Sus mosaicos medievales son extraordinarios y la entrada es gratuita.",
-          "lat": 41.8895,
-          "lng": 12.4697,
-          "price": "Gratis",
+          "coords": { "lat": 41.8895, "lng": 12.4697 },
+          "review": "Una de las iglesias más antiguas de Roma (siglo III). Sus mosaicos medievales son extraordinarios. La plaza exterior es perfecta para el aperitivo.",
           "hours": "07:30–21:00",
-          "review": "Acceder a primera hora o a última luz del día para evitar grupos de turistas. La plaza exterior es perfecta para el aperitivo.",
-          "verified_at": null,
-          "tips": "Verificar horario in situ; puede cerrar durante misas."
+          "price": "Gratis",
+          "tips": "Puede cerrar durante misas. Verificar horario in situ.",
+          "verified_at": null
         },
         {
+          "id": "trilussa",
           "name": "Piazza Trilussa",
-          "type": "Plaza",
-          "description": "El corazón de la vida nocturna del Trastevere. Fuente barroca, terrazas y el mejor ambiente de la ciudad al caer la noche.",
-          "lat": 41.8908,
-          "lng": 12.4710,
-          "price": "Gratis",
+          "coords": { "lat": 41.8908, "lng": 12.4710 },
+          "review": "El corazón de la vida nocturna del Trastevere. Fuente barroca, terrazas y el mejor ambiente de la ciudad al caer la noche.",
           "hours": "Siempre abierta",
-          "review": "El lugar ideal para el primer Spritz romano. Al caer la tarde se llena de locales y viajeros.",
-          "verified_at": "2026-05-10",
-          "tips": null
+          "price": "Gratis",
+          "tips": "El lugar ideal para el primer Spritz romano.",
+          "verified_at": "2026-05-10"
         }
       ],
       "restaurants": [
         {
           "name": "Tonnarello",
           "meal": "cena",
-          "type": "Trattoria clásica",
+          "speciality": "Cacio e pepe, carbonara, pasta in padella (en sartén)",
           "price_range": "€€",
-          "address": "Via della Paglia 1, Trastevere",
-          "speciality": "Cacio e pepe, carbonara, pasta in padella",
-          "review": "Institución del Trastevere desde el siglo XIX. La pasta servida en sartén es una experiencia única. Cola habitual pero rota rápido.",
-          "reservation": "Recomendable, especialmente en fin de semana",
-          "verified_at": null,
-          "tips": "Llegar 15 minutos antes de la hora reservada. Aceptan efectivo y tarjeta."
+          "reservation_required": true,
+          "notes": "Institución del Trastevere desde el siglo XIX. Llegar 15 min antes de la reserva. Aceptan tarjeta."
         }
       ],
       "alternative_plans": {
-        "more_time": "Si el vuelo llega sin retrasos y aún hay energía, aprovechad para cruzar el Puente Sisto y pasear hasta el Campo de Fiori por la noche: una de las plazas más animadas de Roma al caer el sol.",
+        "more_time": "Si el vuelo llega sin retrasos y aún hay energía, cruzad el Puente Sisto y pasead hasta el Campo de Fiori por la noche: una de las plazas más animadas de Roma al caer el sol.",
         "less_time": "Si el vuelo llega tarde o con retraso, simplificad: pizza al taglio en cualquier local del barrio y descanso para el día intenso de mañana.",
-        "rainy_day": "Trastevere bajo la lluvia tiene un encanto especial. Llevad el paraguas y refugiaos en cualquier trattoria; los precios en días de lluvia suelen ser más tranquilos y sin espera."
+        "rainy_day": "Trastevere bajo la lluvia tiene un encanto especial. Llevad el paraguas y refugiaos en cualquier trattoria; los precios en días de lluvia son más tranquilos y sin espera."
+      },
+      "logistics": {
+        "walking_km": 2.5,
+        "walking_time_min": 35,
+        "public_transport": "FL1 Fiumicino → Roma Trastevere (8 €, 40 min)"
+      },
+      "info": {
+        "travel_tips": [
+          "Validar el billete físico del tren en la máquina verde/amarilla del andén antes de subir.",
+          "Los taxis oficiales son blancos con taxímetro; tarifa fija 55 € desde Fiumicino al centro.",
+          "Ignorad a cualquier persona que ofrezca taxi dentro del terminal del aeropuerto."
+        ],
+        "access": [
+          "FL1 Fiumicino → Roma Trastevere: 8 €/persona, ~40 min, cada 15-30 min.",
+          "Leonardo Express → Termini: 14 €, 32 min (necesitáis transbordo para el Trastevere)."
+        ],
+        "facts": [
+          "El Trastevere debe su nombre al latín Trans Tiberim: al otro lado del Tíber.",
+          "La Basílica de Santa María in Trastevere tiene origen en el siglo III d.C.",
+          "El barrio fue zona de artesanos y trabajadores orientales durante el Imperio Romano."
+        ]
       }
     },
     {
       "day": 2,
-      "date": "Sábado 7 junio 2026",
+      "date": "2026-06-07",
       "title": "El Vaticano",
-      "theme": "Museos, Capilla Sixtina y Basílica de San Pedro",
-      "cover_emoji": "🏛️",
       "timeline": [
-        {
-          "time": "07:45",
-          "title": "Desayuno rápido y salida temprana",
-          "description": "Desayunad en cualquier bar del Trastevere: capuchino y cornetto por menos de 3 €. La clave del Vaticano es llegar antes de las 8:30 para evitar las colas del mediodía.",
-          "type": "food",
-          "icon": "☕"
-        },
-        {
-          "time": "08:00",
-          "title": "Traslado al Vaticano",
-          "description": "Desde el Trastevere: autobús 23 o 280 hasta Lungotevere (~15 min) o paseo a pie por el Tíber (~25 min). La entrada de los Museos Vaticanos está en Viale Vaticano.",
-          "type": "transport",
-          "icon": "🚌"
-        },
-        {
-          "time": "08:30",
-          "title": "Museos Vaticanos y Capilla Sixtina",
-          "description": "Reservad entrada con antelación (museivaticani.va) para evitar colas. El recorrido canónico lleva a la Galería de los Mapas, las Estancias de Rafael y finalmente la Capilla Sixtina. Permitid al menos 2,5-3 horas. Precio: ~20 €/persona con reserva.",
-          "type": "activity",
-          "icon": "🎨"
-        },
-        {
-          "time": "11:30",
-          "title": "Basílica de San Pedro",
-          "description": "La entrada a la Basílica es gratuita por la Plaza de San Pedro (cola de seguridad inevitable). Interior monumental, tumba de San Pedro y la Pietà de Miguel Ángel. Podéis subir a la cúpula por 8 € (escaleras) o 10 € (ascensor+escaleras). Vistas privilegiadas sobre Roma.",
-          "type": "activity",
-          "icon": "⛪"
-        },
-        {
-          "time": "13:30",
-          "title": "Comida cerca del Vaticano",
-          "description": "Buscad una trattoria alejada de la Plaza de San Pedro (la zona inmediata es cara y turística). Crossed la Via della Conciliazione y buscad algo en Borgo Pio: precios más ajustados y mejor calidad.",
-          "type": "food",
-          "icon": "🍽️"
-        },
-        {
-          "time": "15:00",
-          "title": "Castel Sant'Angelo",
-          "description": "A cinco minutos del Vaticano, el mausoleo del emperador Adriano reconvertido en fortaleza papal. Maravillosas vistas del Tíber y la ciudad desde la terraza. Entrada: 15 €.",
-          "type": "activity",
-          "icon": "🏰"
-        },
-        {
-          "time": "17:00",
-          "title": "Puente Sant'Angelo y Piazza Navona",
-          "description": "Cruzad el majestuoso puente con sus ángeles barrocos de Bernini. Dirección Piazza Navona, una de las plazas más espectaculares del Barroco romano, con la Fuente de los Cuatro Ríos.",
-          "type": "activity",
-          "icon": "🗿"
-        },
-        {
-          "time": "19:00",
-          "title": "Vuelta al Trastevere y descanso",
-          "description": "El día habrá sido intenso. Regresad al barrio, duchad y recuperad fuerzas antes de la cena.",
-          "type": "logistics",
-          "icon": "🏠"
-        },
-        {
-          "time": "21:00",
-          "title": "Cena: Da Augusto",
-          "description": "Trattoria de la vieja escuela en el corazón del Trastevere. La cuenta se anota a boli en el mantel, solo efectivo. Probad la stracciatella, las alcachofas y algún guiso de carne. Precio medio 15-18 €/persona.",
-          "type": "food",
-          "icon": "🍽️"
-        }
+        { "time": "07:45", "icon": "☕", "title": "Desayuno rápido", "description": "Desayunad en cualquier bar del Trastevere: capuchino y cornetto por menos de 3 €. La clave del Vaticano es llegar antes de las 8:30.", "type": "meal" },
+        { "time": "08:00", "icon": "🚌", "title": "Traslado al Vaticano", "description": "Desde el Trastevere: autobús 23 o 280 hasta Lungotevere (~15 min) o paseo a pie por el Tíber (~25 min). La entrada de los Museos Vaticanos está en Viale Vaticano.", "type": "transport" },
+        { "time": "08:30", "icon": "🎨", "title": "Museos Vaticanos y Capilla Sixtina", "description": "Reservad entrada con antelación en museivaticani.va para evitar colas. El recorrido incluye la Galería de los Mapas, las Estancias de Rafael y la Capilla Sixtina. Permitid al menos 2,5–3 horas. Precio: ~20 €/persona.", "type": "visit", "place_id": "vaticano-museos" },
+        { "time": "11:30", "icon": "⛪", "title": "Basílica de San Pedro", "description": "Entrada gratuita por la Plaza de San Pedro (cola de seguridad inevitable). Interior monumental, tumba de San Pedro y la Pietà de Miguel Ángel. Cúpula: 8 € en escaleras o 10 € con ascensor+escaleras.", "type": "visit", "place_id": "san-pedro" },
+        { "time": "13:30", "icon": "🍽️", "title": "Comida en Borgo Pio", "description": "Buscad una trattoria en Borgo Pio, cruzando la Via della Conciliazione: precios más ajustados y mejor calidad que los restaurantes junto a la plaza.", "type": "meal" },
+        { "time": "15:00", "icon": "🏰", "title": "Castel Sant'Angelo", "description": "El mausoleo del emperador Adriano reconvertido en fortaleza papal. Maravillosas vistas del Tíber desde la terraza. Entrada: 15 €.", "type": "visit", "place_id": "castel-santangelo" },
+        { "time": "17:00", "icon": "🗿", "title": "Puente Sant'Angelo y Piazza Navona", "description": "Cruzad el majestuoso puente con sus ángeles barrocos de Bernini. Dirección Piazza Navona, una de las plazas más espectaculares del Barroco romano.", "type": "visit", "place_id": "navona" },
+        { "time": "19:00", "icon": "🏠", "title": "Vuelta al Trastevere", "description": "Regresad al barrio, duchad y recuperad fuerzas antes de la cena.", "type": "checkin" },
+        { "time": "21:00", "icon": "🍽️", "title": "Cena: Da Augusto", "description": "Trattoria de la vieja escuela en el corazón del Trastevere. La cuenta se anota a boli en el mantel, solo efectivo. Probad la stracciatella, las alcachofas y algún guiso de carne. Precio medio 15–18 €/persona.", "type": "meal" }
       ],
       "places": [
         {
+          "id": "vaticano-museos",
           "name": "Museos Vaticanos y Capilla Sixtina",
-          "type": "Museo",
-          "description": "La mayor colección de arte antiguo del mundo, culminando con los frescos de Miguel Ángel en la Capilla Sixtina (1508-1512).",
-          "lat": 41.9065,
-          "lng": 12.4536,
-          "price": "~20 €/persona (con reserva online)",
-          "hours": "08:00–20:00 (última entrada 18:00). Sábado: abierto.",
-          "review": "Reservad con al menos 2-3 semanas de antelación en museivaticani.va. Sin reserva, las colas pueden ser de 2-3 horas en junio.",
-          "verified_at": "2026-05-10",
-          "tips": "El código de vestimenta es obligatorio: hombros y rodillas cubiertos. Llevad agua."
+          "coords": { "lat": 41.9065, "lng": 12.4536 },
+          "review": "La mayor colección de arte antiguo del mundo, culminando con los frescos de Miguel Ángel en la Capilla Sixtina (1508–1512). Reservad con 2–3 semanas de antelación.",
+          "hours": "08:00–20:00 (última entrada 18:00)",
+          "price": "~20 €/persona con reserva online",
+          "tips": "Código de vestimenta obligatorio: hombros y rodillas cubiertos. Llevad agua.",
+          "gmaps_url": "https://maps.app.goo.gl/9oAtbPRdJnqxGjfq9",
+          "verified_at": "2026-05-10"
         },
         {
+          "id": "san-pedro",
           "name": "Basílica de San Pedro",
-          "type": "Iglesia",
-          "description": "La mayor basílica del mundo y sede del papado. Cúpula de Miguel Ángel, Pietà, altar de Bernini y la tumba de San Pedro bajo el suelo.",
-          "lat": 41.9022,
-          "lng": 12.4539,
-          "price": "Gratis (cúpula: 8-10 €)",
+          "coords": { "lat": 41.9022, "lng": 12.4539 },
+          "review": "La mayor basílica del mundo. Cúpula de Miguel Ángel, Pietà, altar de Bernini y la tumba de San Pedro bajo el suelo.",
           "hours": "07:00–19:00",
-          "review": "Llegad por la mañana para encontrar la cola de seguridad más corta. El interior supera cualquier expectativa.",
-          "verified_at": "2026-05-10",
-          "tips": "Hombros y rodillas cubiertos obligatorio. Si coincide con audiencia papal (miércoles), la plaza está cerrada."
+          "price": "Gratis (cúpula: 8–10 €)",
+          "tips": "Hombros y rodillas cubiertos obligatorio. Si es miércoles, puede haber audiencia papal.",
+          "verified_at": "2026-05-10"
         },
         {
+          "id": "castel-santangelo",
           "name": "Castel Sant'Angelo",
-          "type": "Fortaleza / Museo",
-          "description": "Mausoleo de Adriano (139 d.C.) reconvertido en fortaleza papal, prisión y museo. Las vistas desde la terraza son de las mejores de Roma.",
-          "lat": 41.9031,
-          "lng": 12.4663,
-          "price": "15 €",
+          "coords": { "lat": 41.9031, "lng": 12.4663 },
+          "review": "Mausoleo de Adriano (139 d.C.) reconvertido en fortaleza papal. Los pasajes secretos que conectaban con el Vaticano son visitables. Contad 1,5 horas.",
           "hours": "09:00–19:30",
-          "review": "El recorrido interno es fascinante: los pasajes secretos que conectaban el castillo con el Vaticano aún son visitables. Contad 1,5 horas.",
-          "verified_at": null,
-          "tips": "Verificar precio actual en situ o en la web oficial."
+          "price": "15 €",
+          "tips": "Verificar precio actual antes de ir.",
+          "verified_at": null
         },
         {
+          "id": "navona",
           "name": "Piazza Navona",
-          "type": "Plaza barroca",
-          "description": "Construida sobre el estadio de Domiciano (siglo I d.C.). Tres fuentes, la central obra maestra de Bernini (1651). Artistas callejeros y terrazas.",
-          "lat": 41.8992,
-          "lng": 12.4731,
-          "price": "Gratis",
+          "coords": { "lat": 41.8992, "lng": 12.4731 },
+          "review": "Construida sobre el estadio de Domiciano (siglo I d.C.). La Fuente de los Cuatro Ríos de Bernini (1651) es la pieza central. Maravillosa al atardecer.",
           "hours": "Siempre abierta",
-          "review": "Maravillosa al atardecer. Evitad los restaurantes de la plaza (carísimos); tomad solo un café o gelato.",
-          "verified_at": "2026-05-10",
-          "tips": null
+          "price": "Gratis",
+          "tips": "Evitad los restaurantes de la plaza (muy caros); tomad solo un café o gelato.",
+          "verified_at": "2026-05-10"
         }
       ],
       "restaurants": [
         {
           "name": "Da Augusto",
           "meal": "cena",
-          "type": "Trattoria vieja escuela",
+          "speciality": "Guisos de carne, stracciatella, alcachofas a la romana",
           "price_range": "€",
-          "address": "Piazza de' Renzi 15, Trastevere",
-          "speciality": "Guisos de carne, stracciatella, alcachofas",
-          "review": "Solo efectivo. La cuenta se hace a boli en el mantel. Cocina casera y auténtica sin concesiones al turismo. Uno de los sitios más genuinos del Trastevere.",
-          "reservation": "No aceptan reservas",
-          "verified_at": null,
-          "tips": "Llevad efectivo. Probad los platos del día antes que la carta fija."
+          "reservation_required": false,
+          "notes": "Solo efectivo. La cuenta se hace a boli en el mantel. Cocina casera sin concesiones al turismo. Piazza de Renzi 15, Trastevere."
         }
       ],
       "alternative_plans": {
-        "more_time": "Si la mañana en el Vaticano acaba antes de lo previsto, añadid una visita al Barrio Prati, el elegante barrio del Vaticano: sus bulevares Art Déco y sus pastelerías son una faceta menos conocida de Roma.",
-        "less_time": "Si los Museos Vaticanos agotan las energías, saltaos el Castel Sant'Angelo para esta tarde y reservad la visita para otra mañana. Piazza Navona sí merece el paseo aunque sea breve.",
-        "rainy_day": "El interior de los Museos Vaticanos es perfecto para días de lluvia: podéis pasar 4-5 horas allí sin problema. Si llueve por la tarde, Piazza Navona bajo la lluvia es fotogénicamente perfecta."
+        "more_time": "Si la mañana en el Vaticano acaba antes, añadid una visita al Barrio Prati: sus bulevares Art Déco y pastelerías son una faceta menos conocida de Roma.",
+        "less_time": "Si los Museos Vaticanos agotan las energías, saltaos el Castel Sant'Angelo esta tarde. Piazza Navona sí merece el paseo aunque sea breve.",
+        "rainy_day": "El interior de los Museos Vaticanos es perfecto para días de lluvia: podéis pasar 4–5 horas allí sin problema. Piazza Navona bajo la lluvia es fotogénicamente perfecta."
+      },
+      "logistics": {
+        "walking_km": 8,
+        "walking_time_min": 110,
+        "public_transport": "Bus 23/280 Trastevere → Vaticano (~15 min, 1,50 €)"
+      },
+      "info": {
+        "travel_tips": [
+          "Reservad los Museos Vaticanos con al menos 2–3 semanas de antelación en museivaticani.va.",
+          "Sin reserva, las colas pueden ser de 2–3 horas en junio (temporada alta).",
+          "Llevad un pañuelo o camiseta fina para cubrir hombros en iglesias y museos."
+        ],
+        "access": [
+          "Museos Vaticanos: entrada en Viale Vaticano (no por la plaza de San Pedro).",
+          "Basílica de San Pedro: acceso por la Plaza de San Pedro, control de seguridad obligatorio."
+        ],
+        "facts": [
+          "La Capilla Sixtina recibe unos 6 millones de visitantes al año.",
+          "Miguel Ángel tardó 4 años en pintar el techo (1508–1512) y otros 6 en el Juicio Final (1536–1541).",
+          "La Basílica de San Pedro tardó más de 120 años en construirse (1506–1626)."
+        ]
       }
     },
     {
       "day": 3,
-      "date": "Domingo 8 junio 2026",
+      "date": "2026-06-08",
       "title": "Domenica al Museo · Todo gratis",
-      "theme": "Panteón + Coliseo + Foro Romano · Entrada libre",
-      "cover_emoji": "🏟️",
       "timeline": [
-        {
-          "time": "08:00",
-          "title": "Desayuno y salida muy temprana",
-          "description": "Hoy es el Domingo al Museo (primer domingo del mes): Panteón y Coliseo entran gratis, pero las colas son enormes. Salid de casa a las 8:00 como máximo.",
-          "type": "food",
-          "icon": "☕"
-        },
-        {
-          "time": "08:45",
-          "title": "Panteón de Agripa — entrada gratuita",
-          "description": "Llegad antes de las 9:00 (hora de apertura) para ser de las primeras en la cola. El Panteón abre de 9:00 a 19:00 y el primer domingo es gratuito. La cúpula de 43 metros y el óculo que deja caer la luz del cielo son de las experiencias arquitectónicas más poderosas del mundo.",
-          "type": "activity",
-          "icon": "🏛️"
-        },
-        {
-          "time": "10:00",
-          "title": "Fontana di Trevi y centro histórico",
-          "description": "A 10 minutos del Panteón. La tradición de la moneda es medieval: lanzad una moneda de espaldas con la mano derecha para garantizar el regreso. La fuente luce espectacular de mañana, antes de la avalancha turística.",
-          "type": "activity",
-          "icon": "⛲"
-        },
-        {
-          "time": "11:00",
-          "title": "Traslado al Coliseo",
-          "description": "Metro línea B desde Colosseo o taxi. Llegad para las 11:00-11:30 a recoger la entrada gratuita en taquilla (Piazza del Colosseo, junto al Templo de Venus y Roma). Las colas son largas: tened paciencia. Llevaréis agua y protección solar.",
-          "type": "transport",
-          "icon": "🚇"
-        },
-        {
-          "time": "12:00",
-          "title": "Coliseo — entrada gratuita",
-          "description": "El anfiteatro más famoso del mundo, inaugurado en el 80 d.C. por el emperador Tito. Recoged la entrada gratuita en taquilla (se forma cola, llegad pronto). La entrada incluye el primer y segundo anillo y el museo interior. Tiempo recomendado: 75 minutos.",
-          "type": "activity",
-          "icon": "🏟️"
-        },
-        {
-          "time": "13:30",
-          "title": "Foro Romano y Monte Palatino — gratuito",
-          "description": "La misma entrada os da acceso al Foro Romano (corazón político de Roma) y al Monte Palatino (donde vivían los emperadores). Usad las 24 horas de validez de la entrada. Pasad al menos 1,5-2 horas aquí.",
-          "type": "activity",
-          "icon": "🏺"
-        },
-        {
-          "time": "15:30",
-          "title": "Comida en la zona del Aventino",
-          "description": "El barrio del Aventino, justo al sur del Palatino, tiene restaurantes más tranquilos y mejores precios que los alrededores inmediatos del Coliseo. Buscad una trattoria en Via Marmorata.",
-          "type": "food",
-          "icon": "🍽️"
-        },
-        {
-          "time": "17:00",
-          "title": "Circo Máximo y colina del Aventino",
-          "description": "El Circo Máximo (circus maximus), donde se celebraban las carreras de cuadrigas, hoy es un parque verde con vistas al Palatino. Subid al Aventino para ver la famosa cerradura del jardín de los Caballeros de Malta: a través de ella se ven perfectamente alineados la cúpula de San Pedro, los jardines y el horizonte romano.",
-          "type": "activity",
-          "icon": "🌿"
-        },
-        {
-          "time": "19:00",
-          "title": "Regreso al Trastevere y descanso",
-          "description": "El Trastevere está a 20 minutos a pie del Aventino, o tomad el autobús 3. Descansad antes de la última noche.",
-          "type": "logistics",
-          "icon": "🏠"
-        },
-        {
-          "time": "21:00",
-          "title": "Última cena en el Trastevere",
-          "description": "La noche de cierre merece algo especial. Probad Ivo a Trastevere para una pizza romana al horno de leña, fina y crujiente, o Da Enzo al 29 para una carbonara de las que se recuerdan. Acompañad con vino de la casa.",
-          "type": "food",
-          "icon": "🍕"
-        },
-        {
-          "time": "23:00",
-          "title": "Copa de despedida",
-          "description": "Terminar la noche en Piazza Trilussa o en cualquier bar de Via della Scala. El Trastevere nocturno es una de las mejores experiencias de Roma.",
-          "type": "activity",
-          "icon": "🌙"
-        }
+        { "time": "08:00", "icon": "☕", "title": "Desayuno y salida muy temprana", "description": "Hoy es el Domenica al Museo: Panteón y Coliseo entran gratis. Las colas son enormes. Salid de casa a las 8:00 como máximo.", "type": "meal" },
+        { "time": "08:45", "icon": "🏛️", "title": "Panteón de Agripa — entrada gratuita", "description": "Llegad antes de las 9:00 (hora de apertura) para ser de las primeras en la cola. El primer domingo el Panteón es gratuito. La cúpula de 43 metros y el óculo que deja caer la luz del cielo son de las experiencias arquitectónicas más poderosas del mundo.", "type": "visit", "place_id": "panteon" },
+        { "time": "10:00", "icon": "⛲", "title": "Fontana di Trevi y centro histórico", "description": "A 10 minutos del Panteón. La fuente luce espectacular de mañana, antes de la avalancha turística. Lanzad una moneda de espaldas con la mano derecha para garantizar el regreso.", "type": "visit", "place_id": "trevi" },
+        { "time": "11:00", "icon": "🚇", "title": "Traslado al Coliseo", "description": "Metro línea B, parada Colosseo. Llegad para las 11:00–11:30 a recoger la entrada gratuita en taquilla (Piazza del Colosseo, junto al Templo de Venus y Roma). Llevad agua y protección solar.", "type": "transport" },
+        { "time": "12:00", "icon": "🏟️", "title": "Coliseo — entrada gratuita", "description": "El anfiteatro más famoso del mundo, inaugurado en el 80 d.C. Recoged la entrada gratuita en taquilla (por orden de llegada). La entrada incluye el 1.º y 2.º anillo y el museo interior. Tiempo recomendado: 75 minutos.", "type": "visit", "place_id": "coliseo" },
+        { "time": "13:30", "icon": "🏺", "title": "Foro Romano y Monte Palatino — gratuito", "description": "La misma entrada os da acceso al Foro Romano y al Monte Palatino con 24 horas de validez. El corazón político de Roma durante siglos. Pasad al menos 1,5–2 horas.", "type": "visit", "place_id": "foro-romano" },
+        { "time": "15:30", "icon": "🍽️", "title": "Comida zona Aventino", "description": "El barrio del Aventino tiene restaurantes más tranquilos y mejores precios que el entorno inmediato del Coliseo. Buscad una trattoria en Via Marmorata.", "type": "meal" },
+        { "time": "17:00", "icon": "🌿", "title": "Cerradura de los Caballeros de Malta", "description": "Subid al Aventino para ver la famosa cerradura del jardín de la Orden de Malta: a través de ella se ve perfectamente alineados la cúpula de San Pedro, los jardines y el horizonte romano. Uno de los secretos más bonitos de Roma.", "type": "visit", "place_id": "cerradura" },
+        { "time": "19:00", "icon": "🏠", "title": "Regreso al Trastevere", "description": "Autobús 3 desde el Aventino hasta el Trastevere (~20 min). Descansad antes de la última noche.", "type": "checkin" },
+        { "time": "21:00", "icon": "🍕", "title": "Última cena: Ivo a Trastevere", "description": "La noche de cierre merece pizza romana al horno de leña: fina, crujiente, perfecta. Ivo lleva más de 60 años en activo. Abre solo a partir de las 17:30.", "type": "meal" },
+        { "time": "23:00", "icon": "🌙", "title": "Copa de despedida en Piazza Trilussa", "description": "El Trastevere nocturno es una de las mejores experiencias de Roma. Terminar la noche entre locales en la plaza de siempre.", "type": "free" }
       ],
       "places": [
         {
+          "id": "panteon",
           "name": "Panteón de Agripa",
-          "type": "Monumento",
-          "description": "El edificio mejor conservado de la Antigua Roma (126 d.C.). Cúpula de 43 m, óculo central y tumbas de Rafael y los reyes de Italia.",
-          "lat": 41.8986,
-          "lng": 12.4769,
-          "price": "GRATIS el primer domingo de mes (normalmente 5 €)",
+          "coords": { "lat": 41.8986, "lng": 12.4769 },
+          "review": "El edificio mejor conservado de la Antigua Roma (126 d.C.). Llegad antes de las 9:00 para evitar la cola de gratuidad. El impacto visual de la cúpula en el interior supera cualquier foto.",
           "hours": "09:00–19:00",
-          "review": "Llegad antes de las 9:00 para evitar la cola de gratuidad. En días normales la entrada es 5 €. El impacto visual de la cúpula en el interior supera cualquier foto.",
-          "verified_at": "2026-05-10",
-          "tips": "Código de vestimenta: hombros y rodillas cubiertos (es iglesia activa)."
+          "price": "GRATIS el primer domingo (normalmente 5 €)",
+          "tips": "Código de vestimenta: hombros y rodillas cubiertos (es iglesia activa).",
+          "verified_at": "2026-05-10"
         },
         {
+          "id": "trevi",
           "name": "Fontana di Trevi",
-          "type": "Monumento",
-          "description": "La fuente barroca más grande del mundo (1762). Escenario de la famosa escena de La Dolce Vita de Fellini.",
-          "lat": 41.9009,
-          "lng": 12.4833,
-          "price": "Gratis",
+          "coords": { "lat": 41.9009, "lng": 12.4833 },
+          "review": "La fuente barroca más grande del mundo (1762). Espectacular a primera hora de la mañana, cuando aún hay poca gente.",
           "hours": "Siempre abierta",
-          "review": "Espectacular a primera hora de la mañana, cuando aún hay poca gente. El agua es de color azul turquesa intenso.",
-          "verified_at": "2026-05-10",
-          "tips": "Evitad la zona a mediodía: decenas de miles de turistas."
-        },
-        {
-          "name": "Coliseo",
-          "type": "Monumento arqueológico",
-          "description": "El anfiteatro romano más grande del mundo (80 d.C.). Capacidad original: más de 50.000 espectadores. Símbolo eterno de Roma.",
-          "lat": 41.8902,
-          "lng": 12.4922,
-          "price": "GRATIS el primer domingo de mes (normalmente 18 €)",
-          "hours": "08:30–19:15 (junio)",
-          "review": "La entrada gratuita se recoge en taquilla. Las colas son largas en el Domenica al Museo pero merece la pena. Llevad agua y crema solar.",
-          "verified_at": "2026-05-10",
-          "tips": "La entrada incluye Foro Romano y Palatino con validez de 24 horas."
-        },
-        {
-          "name": "Foro Romano y Monte Palatino",
-          "type": "Yacimiento arqueológico",
-          "description": "El corazón político y religioso de la Roma antigua. El Palatino fue la colina donde vivían los emperadores y según la tradición, donde Rómulo fundó la ciudad.",
-          "lat": 41.8925,
-          "lng": 12.4853,
-          "price": "Incluido en la entrada del Coliseo",
-          "hours": "09:30–19:15 (junio)",
-          "review": "Más impresionante de lo que parece en fotos. El Arco de Tito (81 d.C.) y el Templo de Saturno son obligatorios. Llevad un mapa o audioguía (5,50 €) para entender qué veis.",
-          "verified_at": "2026-05-10",
-          "tips": "Mucho sol y sin sombra. Salid hacia las 15:30 y visitad por la tarde si podéis."
-        },
-        {
-          "name": "Cerradura de los Caballeros de Malta",
-          "type": "Curiosidad",
-          "description": "A través de la cerradura del jardín de la Orden de Malta en el Aventino se ve perfectamente alineada la cúpula de San Pedro entre los cipreses.",
-          "lat": 41.8830,
-          "lng": 12.4792,
           "price": "Gratis",
-          "hours": "Siempre accesible (el jardín puede cerrar por la tarde)",
-          "review": "Uno de los secretos mejor guardados de Roma. Generalmente hay cola de gente esperando para mirar, pero es rápido.",
-          "verified_at": null,
-          "tips": "Verificar acceso al jardín exterior in situ."
+          "tips": "Evitad la zona a mediodía: decenas de miles de turistas.",
+          "verified_at": "2026-05-10"
+        },
+        {
+          "id": "coliseo",
+          "name": "Coliseo",
+          "coords": { "lat": 41.8902, "lng": 12.4922 },
+          "review": "El anfiteatro romano más grande del mundo (80 d.C.). La entrada gratuita se recoge en taquilla por orden de llegada. Llevad agua y crema solar.",
+          "hours": "08:30–19:15 (junio)",
+          "price": "GRATIS el primer domingo (normalmente 18 €)",
+          "tips": "La entrada incluye Foro Romano y Palatino con 24 horas de validez.",
+          "gmaps_url": "https://maps.app.goo.gl/AKbCfMFGHNy3c1d7A",
+          "verified_at": "2026-05-10"
+        },
+        {
+          "id": "foro-romano",
+          "name": "Foro Romano y Monte Palatino",
+          "coords": { "lat": 41.8925, "lng": 12.4853 },
+          "review": "El Arco de Tito (81 d.C.) y el Templo de Saturno son obligatorios. El Palatino ofrece vistas espectaculares. Llevad audioguía (5,50 €) para entender qué veis.",
+          "hours": "09:30–19:15 (junio)",
+          "price": "Incluido en la entrada del Coliseo",
+          "tips": "Mucho sol y poca sombra. Si hace mucho calor, visitad por la tarde.",
+          "verified_at": "2026-05-10"
+        },
+        {
+          "id": "cerradura",
+          "name": "Cerradura de los Caballeros de Malta",
+          "coords": { "lat": 41.8830, "lng": 12.4792 },
+          "review": "Uno de los secretos más bonitos de Roma: a través de la cerradura se ve perfectamente alineada la cúpula de San Pedro entre los cipreses del jardín.",
+          "hours": "Acceso libre al exterior",
+          "price": "Gratis",
+          "tips": "Suele haber cola breve. El jardín interior puede cerrar; el exterior siempre es accesible.",
+          "verified_at": null
         }
       ],
       "restaurants": [
         {
           "name": "Ivo a Trastevere",
           "meal": "cena",
-          "type": "Pizzería clásica",
-          "price_range": "€€",
-          "address": "Via di San Francesco a Ripa 158, Trastevere",
           "speciality": "Pizza romana al horno de leña, fiori di zucca, supplì",
-          "review": "Institución de más de 60 años. La pizza romana es fina, baja y crujiente. El ambiente es genuino y animado. Abre solo por la tarde.",
-          "reservation": "No necesaria generalmente",
-          "verified_at": null,
-          "tips": "Abre solo a partir de las 17:30. Los martes cierra. Comprobad antes de ir."
+          "price_range": "€€",
+          "reservation_required": false,
+          "notes": "Institución de más de 60 años. Abre solo a partir de las 17:30. Cierra los martes. Confirmar antes de ir. Via di San Francesco a Ripa 158."
         }
       ],
       "alternative_plans": {
-        "more_time": "Si el Foro Romano y el Palatino no os cansan, subid al Aventino para visitar también la Basílica de Santa Sabina (siglo V), una de las iglesias paleocristianas mejor conservadas de Roma, con vistas al Tíber.",
-        "less_time": "Si las colas del Coliseo son agotadoras, renunciad al Monte Palatino esta tarde y reservad energía para el Panteón y la Fontana di Trevi. El Foro Romano puede verse brevemente desde el exterior sin entrar.",
-        "rainy_day": "El interior del Coliseo está parcialmente cubierto. En caso de lluvia intensa, prioriza el Panteón (totalmente cubierto) y dejad el Foro para cuando escampe. Los museos capitalinos (también gratuitos el primer domingo) son una alternativa excelente bajo la lluvia."
+        "more_time": "Si el Foro Romano no os cansa, subid al Aventino para visitar también la Basílica de Santa Sabina (siglo V), una de las iglesias paleocristianas mejor conservadas de Roma, con vistas al Tíber.",
+        "less_time": "Si las colas del Coliseo son agotadoras, renunciad al Monte Palatino y reservad energía para el Panteón y la Fontana di Trevi. El Foro Romano puede verse brevemente desde el exterior.",
+        "rainy_day": "El interior del Coliseo está parcialmente cubierto. En caso de lluvia intensa, priorizar el Panteón (totalmente cubierto). Los Museos Capitolinos (también gratuitos el primer domingo) son una excelente alternativa bajo la lluvia."
+      },
+      "logistics": {
+        "walking_km": 10,
+        "walking_time_min": 140,
+        "public_transport": "Metro B parada Colosseo · Bus 3 Aventino→Trastevere"
+      },
+      "info": {
+        "travel_tips": [
+          "Salid de casa antes de las 8:00 para llegar al Panteón antes de la apertura.",
+          "Las entradas gratuitas del Coliseo se reparten por orden de llegada en taquilla: no se pueden reservar.",
+          "Llevad botella de agua reutilizable: hay fuentes nasoni con agua potable gratuita por toda la ciudad."
+        ],
+        "access": [
+          "Panteón: entrada por la Piazza della Rotonda. Gratuito el primer domingo.",
+          "Coliseo: taquilla en Piazza del Colosseo junto al Templo de Venus y Roma.",
+          "Metro línea B, parada Colosseo, para llegar al área arqueológica."
+        ],
+        "facts": [
+          "El Coliseo fue inaugurado en el año 80 d.C. por el emperador Tito con 100 días de juegos.",
+          "El Panteón tiene la cúpula de hormigón no reforzado más grande del mundo: 43,3 metros de diámetro.",
+          "El primer domingo de cada mes, los museos estatales italianos son gratuitos para todos."
+        ]
       }
     },
     {
       "day": 4,
-      "date": "Lunes 9 junio 2026",
+      "date": "2026-06-09",
       "title": "Última mañana romana",
-      "theme": "Mercado, callejeo y vuelta a Valencia",
-      "cover_emoji": "🛫",
       "timeline": [
-        {
-          "time": "08:00",
-          "title": "Desayuno tranquilo",
-          "description": "Último desayuno romano en la Pasticceria Borghese o cualquier bar del barrio. Capuchino y maritozzo, el dulce romano por excelencia.",
-          "type": "food",
-          "icon": "☕"
-        },
-        {
-          "time": "09:00",
-          "title": "Mercado de Porta Portese (solo si es domingo) / Mercado de Campo de Fiori",
-          "description": "Como hoy es lunes, el Porta Portese (el gran mercadillo del domingo) ya ha terminado. En su lugar, visitad el Mercado de Campo de Fiori, abierto de lunes a sábado por la mañana: flores, fruta, especias y productos locales en una de las plazas más fotogénicas de Roma.",
-          "type": "activity",
-          "icon": "🌸"
-        },
-        {
-          "time": "10:00",
-          "title": "Ghetto Ebraico y Largo Argentina",
-          "description": "El barrio judío romano, uno de los más antiguos del mundo, está a diez minutos del Trastevere. El Largo di Torre Argentina es el yacimiento arqueológico donde fue asesinado Julio César en el 44 a.C. —hoy también alberga una colonia de gatos callejeros—.",
-          "type": "activity",
-          "icon": "🐱"
-        },
-        {
-          "time": "11:00",
-          "title": "Recogida de maletas y check-out",
-          "description": "Regresad al Airbnb para recoger el equipaje. Si el anfitrión lo permite, dejad las maletas y continuad hasta las 12:00.",
-          "type": "logistics",
-          "icon": "🧳"
-        },
-        {
-          "time": "11:30",
-          "title": "Traslado al aeropuerto Fiumicino",
-          "description": "Tren regional FL1 desde Roma Trastevere hasta el aeropuerto Fiumicino (8 €, ~40 min). Con vuelo a las 12:35, salid del alojamiento como máximo a las 10:45 para tener margen. El aeropuerto recomienda llegar 2 horas antes.",
-          "type": "transport",
-          "icon": "🚂"
-        },
-        {
-          "time": "12:35",
-          "title": "Salida hacia Valencia (VLC)",
-          "description": "Vuelo Roma FCO → Valencia. Llegada prevista a las 14:45. ¡Arrivederci, Roma!",
-          "type": "transport",
-          "icon": "✈️"
-        }
+        { "time": "08:00", "icon": "☕", "title": "Último desayuno romano", "description": "Capuchino y maritozzo (el dulce romano por excelencia) en cualquier bar del barrio. Desayuno tranquilo antes de recoger maletas.", "type": "meal" },
+        { "time": "09:00", "icon": "🌸", "title": "Mercado de Campo de Fiori", "description": "Mercado matutino de flores, fruta, especias y productos locales en la plaza donde Giordano Bruno fue quemado en 1600. Uno de los mercados más pintorescos de Roma. Abierto lunes–sábado.", "type": "visit", "place_id": "campo-fiori" },
+        { "time": "10:00", "icon": "🐱", "title": "Ghetto Ebraico y Largo Argentina", "description": "El barrio judío romano, uno de los más antiguos del mundo, a diez minutos del Trastevere. El Largo di Torre Argentina es el yacimiento donde fue asesinado Julio César —hoy también hogar de una colonia de gatos callejeros—.", "type": "visit", "place_id": "largo-argentina" },
+        { "time": "10:45", "icon": "🧳", "title": "Recogida de maletas y check-out", "description": "Regresad al Airbnb para recoger el equipaje. Salid del alojamiento como máximo a las 10:45 para llegar al aeropuerto con margen.", "type": "checkout" },
+        { "time": "11:00", "icon": "🚂", "title": "Traslado a Fiumicino", "description": "Tren regional FL1 desde Roma Trastevere hasta el aeropuerto Fiumicino (8 €, ~40 min). Con vuelo a las 12:35, salid del alojamiento antes de las 10:45.", "type": "transport" },
+        { "time": "12:35", "icon": "✈️", "title": "Salida hacia Valencia (VLC)", "description": "Vuelo Roma FCO → Valencia. Llegada prevista a las 14:45. ¡Arrivederci, Roma!", "type": "transport" }
       ],
       "places": [
         {
+          "id": "campo-fiori",
           "name": "Mercado de Campo de Fiori",
-          "type": "Mercado",
-          "description": "Mercado matutino de frutas, verduras, especias y flores en la plaza donde Giordano Bruno fue quemado en 1600. Abierto lunes-sábado.",
-          "lat": 41.8955,
-          "lng": 12.4722,
+          "coords": { "lat": 41.8955, "lng": 12.4722 },
+          "review": "Los lunes tiene menos turistas que los fines de semana. Probad algún producto local de temporada. Podéis comprar algo para picar en el vuelo.",
+          "hours": "07:00–14:00 (lunes a sábado)",
           "price": "Gratis (compras aparte)",
-          "hours": "07:00–14:00",
-          "review": "Uno de los mercados más pintorescos de Roma. Los lunes suele tener menos turistas. Probad algún producto local de temporada.",
-          "verified_at": null,
-          "tips": "Comprad algo para picar en el vuelo: quesos, embutidos o fruta de temporada."
+          "tips": "La plaza también alberga la estatua de Giordano Bruno, quemado aquí en 1600 por la Inquisición.",
+          "verified_at": null
         },
         {
+          "id": "largo-argentina",
           "name": "Largo di Torre Argentina",
-          "type": "Yacimiento arqueológico",
-          "description": "Cuatro templos republicanos (siglos IV-II a.C.) y el lugar donde fue asesinado Julio César. También hogar de la famosa colonia de gatos de Roma.",
-          "lat": 41.8960,
-          "lng": 12.4757,
-          "price": "Gratis (exterior) / 5 € (interior)",
+          "coords": { "lat": 41.8960, "lng": 12.4757 },
+          "review": "Cuatro templos republicanos (siglos IV–II a.C.) y el lugar donde fue asesinado Julio César. Los gatos son la atracción secundaria más famosa.",
           "hours": "09:30–19:30",
-          "review": "El yacimiento puede verse perfectamente desde el borde sin pagar. Los gatos son la atracción secundaria más famosa de Roma.",
-          "verified_at": null,
-          "tips": "Verificar precio de entrada interior in situ."
+          "price": "Gratis (exterior) / 5 € interior",
+          "tips": "El yacimiento puede verse perfectamente desde el borde sin pagar. Verificar precio interior in situ.",
+          "verified_at": null
         }
       ],
       "restaurants": [
         {
-          "name": "Bar del Fico o similar en Campo de Fiori",
-          "meal": "almuerzo rápido",
-          "type": "Bar / Café",
+          "name": "Pizza al taglio cerca de Campo de Fiori",
+          "meal": "almuerzo",
+          "speciality": "Pizza al corte, panini",
           "price_range": "€",
-          "address": "Zona Campo de Fiori, Roma",
-          "speciality": "Bocadillos, pizza al taglio, coffee",
-          "review": "Para el último día lo ideal es algo ligero antes del vuelo. Evitad comer demasiado.",
-          "reservation": "No necesaria",
-          "verified_at": null,
-          "tips": "Comprad un panino o pizza al taglio para llevar."
+          "reservation_required": false,
+          "notes": "Para el último día lo ideal es algo ligero antes del vuelo. Cualquier local de pizza al taglio de la zona sirve."
         }
       ],
       "alternative_plans": {
-        "more_time": "Si el check-out es temprano y os sobra tiempo, el Palazzo Altemps (Museos Nacionales Romanos) está a cinco minutos de Piazza Navona y tiene una colección de escultura antigua extraordinaria con muy poca gente.",
-        "less_time": "Si hay que salir rápido, saltaos el callejeo y id directamente al aeropuerto con margen. El FL1 desde Roma Trastevere a Fiumicino es la opción más directa y puntual."
+        "more_time": "Si el check-out es muy temprano y os sobra tiempo, el Palazzo Altemps (Museos Nacionales Romanos) está a cinco minutos de Piazza Navona y tiene una colección de escultura antigua con muy poca gente.",
+        "less_time": "Si hay que salir rápido, saltaos el callejeo e id directamente al aeropuerto con margen. El FL1 desde Roma Trastevere a Fiumicino es la opción más directa y puntual."
+      },
+      "logistics": {
+        "walking_km": 2,
+        "walking_time_min": 30,
+        "public_transport": "FL1 Roma Trastevere → Fiumicino (8 €, 40 min)"
+      },
+      "info": {
+        "travel_tips": [
+          "Con vuelo a las 12:35, salid del alojamiento antes de las 10:45 para llegar con margen.",
+          "El FL1 desde Roma Trastevere sale cada 15–30 minutos. Comprobad el horario en Trenitalia.",
+          "Facturad el equipaje online antes de salir del Airbnb si la aerolínea lo permite."
+        ],
+        "access": [
+          "Estación Roma Trastevere: a pocos minutos a pie del barrio.",
+          "Tren FL1: sale desde el nivel 2 de la estación. Validar billete antes de subir."
+        ],
+        "facts": [
+          "El aeropuerto de Fiumicino fue inaugurado en 1960 para los Juegos Olímpicos de Roma.",
+          "En esas mismas olimpiadas, Abebe Bikila corrió el maratón descalzo pasando por el Arco de Constantino."
+        ]
       }
     }
   ],
   "practical_tips": [
     {
-      "title": "🚌 Transporte",
+      "icon": "🚌",
+      "title": "Transporte",
       "items": [
-        {
-          "subtitle": "Aeropuerto → Trastevere",
-          "text": "Tren regional FL1 (8 €, ~40 min) desde Fiumicino hasta la estación Roma Trastevere. Es la opción más directa y económica para vuestro alojamiento. Validar el billete físico antes de subir en la máquina verde/amarilla del andén. Taxi oficial: tarifa fija 55 € para el centro."
-        },
-        {
-          "subtitle": "Transporte urbano",
-          "text": "El billete sencillo cuesta 1,50 € y es válido 100 minutos en metro, autobús y tranvía. El bono de 24 h cuesta 7 €. El Trastevere tiene buena conexión con el centro: autobús 8, 23, H y tranvía 8."
-        },
-        {
-          "subtitle": "A pie es la mejor opción",
-          "text": "Roma centro es compacta y caminable. Del Trastevere al Panteón son 25 minutos a pie; al Coliseo, 35 minutos. Llevad calzado muy cómodo —los adoquines romanos son implacables—."
-        }
+        { "subtitle": "Aeropuerto → Trastevere", "text": "Tren regional FL1 (8 €, ~40 min) desde Fiumicino hasta la estación Roma Trastevere. La opción más directa y económica para vuestro alojamiento. Validar el billete físico antes de subir en la máquina verde/amarilla del andén." },
+        { "subtitle": "Transporte urbano", "text": "Billete sencillo 1,50 € (válido 100 min en metro, bus y tranvía). Bono 24 h: 7 €. El Trastevere tiene buena conexión: autobús 8, 23, H y tranvía 8." },
+        { "subtitle": "A pie es la mejor opción", "text": "Roma centro es compacta y caminable. Del Trastevere al Panteón son 25 min a pie; al Coliseo, 35 min. Llevad calzado muy cómodo —los adoquines romanos son implacables—." }
       ]
     },
     {
-      "title": "💰 Trucos de ahorro",
+      "icon": "💰",
+      "title": "Trucos de ahorro",
       "items": [
-        {
-          "subtitle": "Domenica al Museo",
-          "text": "El primer domingo de cada mes todos los museos estatales italianos son gratuitos: Coliseo, Foro Romano, Palatino, Panteón y muchos más. El 8 de junio podéis ahorrar más de 23 € por persona solo en el Coliseo y el Panteón."
-        },
-        {
-          "subtitle": "Fuentes de agua gratuita",
-          "text": "Roma tiene más de 2.500 fuentes públicas llamadas «nasoni» (narices) con agua potable fría y deliciosa. Llevad una botella reutilizable y rellenadla en cualquier fuente: ahorraréis 3-5 € diarios en botellas."
-        },
-        {
-          "subtitle": "Desayuno en bar de barrio",
-          "text": "Capuchino + cornetto en barra: 2,50-3 €. En terraza: el doble. Los italianos desayunan de pie en barra y tienen razón."
-        },
-        {
-          "subtitle": "Menú del mediodía",
-          "text": "Los restaurantes del Trastevere suelen tener menú del día entre 12 y 15 €: primer plato, segundo, bebida y postre. Mucho más económico que cenar con carta completa."
-        }
+        { "subtitle": "Domenica al Museo", "text": "El primer domingo de cada mes todos los museos estatales italianos son gratuitos: Coliseo, Foro Romano, Palatino, Panteón y muchos más. El 8 de junio podéis ahorrar más de 46 € entre las dos." },
+        { "subtitle": "Fuentes de agua gratuita", "text": "Roma tiene más de 2.500 fuentes públicas llamadas nasoni con agua potable fría y deliciosa. Llevad una botella reutilizable: ahorraréis 3–5 € diarios en botellas." },
+        { "subtitle": "Desayuno en barra", "text": "Capuchino + cornetto en barra: 2,50–3 €. En terraza: el doble. Los italianos desayunan de pie en barra y tienen razón." },
+        { "subtitle": "Menú del mediodía", "text": "Los restaurantes del Trastevere suelen tener menú del día entre 12 y 15 €: primer plato, segundo, bebida y postre. Mucho más económico que cenar con carta completa." }
       ]
     },
     {
-      "title": "🏛️ Cultura local",
+      "icon": "🏛️",
+      "title": "Cultura local",
       "items": [
-        {
-          "subtitle": "El ritmo romano",
-          "text": "Los romanos cenan tarde: las trattorias se llenan a partir de las 20:30. Si entráis a las 19:30 estaréis solos (y el personal puede estar poco animado). Respetad el ritmo local."
-        },
-        {
-          "subtitle": "Coperto y servicio",
-          "text": "En muchos restaurantes se cobra «coperto» (cubierto): 1,50-3 € por persona. No es una estafa, es costumbre. El servicio (propina) es opcional pero se agradece redondear la cuenta."
-        },
-        {
-          "subtitle": "El Trastevere es el barrio más auténtico",
-          "text": "Evitad los restaurantes con foto-menú en la puerta y camareros que os llaman desde la calle. Buscad los que están llenos de locales."
-        }
+        { "subtitle": "El ritmo romano", "text": "Los romanos cenan tarde: las trattorias se llenan a partir de las 20:30. Si entráis a las 19:30 estaréis solos y el personal puede estar poco animado. Respetad el ritmo local." },
+        { "subtitle": "Coperto y servicio", "text": "En muchos restaurantes se cobra coperto (cubierto): 1,50–3 € por persona. No es una estafa, es costumbre. La propina es opcional pero se agradece redondear la cuenta." },
+        { "subtitle": "Autenticidad en el Trastevere", "text": "Evitad los restaurantes con foto-menú en la puerta y camareros que os llaman desde la calle. Buscad los que están llenos de locales italinos." }
       ]
     },
     {
-      "title": "🍝 Gastronomía",
+      "icon": "🍝",
+      "title": "Gastronomía",
       "items": [
-        {
-          "subtitle": "Los cuatro clásicos de la pasta romana",
-          "text": "Cacio e pepe (queso y pimienta), Carbonara (guanciale, huevo y pecorino, jamás con nata), Amatriciana (tomate, guanciale y pecorino) y Gricia (guanciale y pecorino, sin tomate). Si alguna lleva nata, salid corriendo."
-        },
-        {
-          "subtitle": "Supplì y trapizzino",
-          "text": "El supplì es la croqueta romana: arroz frito con ragù y mozzarella fundida. El trapizzino es la invención más reciente: masa de pizza enrollada con rellenos varios. Ambos son imprescindibles como street food."
-        },
-        {
-          "subtitle": "Gelato auténtico",
-          "text": "El gelato artesanal (artigianale) se reconoce porque no tiene colores flúor y los sabores están guardados en recipientes con tapa. Si el helado está en montañas de colores brillantes, es industrial."
-        },
-        {
-          "subtitle": "Café romano",
-          "text": "El espresso en Roma es más corto y concentrado que en España. El capuchino se toma solo en el desayuno; pedirlo por la tarde es de turista. El caffè macchiato (manchado de leche) es una buena alternativa."
-        }
+        { "subtitle": "Los cuatro clásicos de la pasta romana", "text": "Cacio e pepe (queso y pimienta), Carbonara (guanciale, huevo y pecorino, jamás con nata), Amatriciana (tomate, guanciale y pecorino) y Gricia (guanciale y pecorino, sin tomate). Si alguna lleva nata, cambiad de restaurante." },
+        { "subtitle": "Supplì y trapizzino", "text": "El supplì es la croqueta romana: arroz frito con ragù y mozzarella fundida. El trapizzino es masa de pizza enrollada con rellenos varios. Ambos son imprescindibles como street food." },
+        { "subtitle": "Gelato auténtico", "text": "El gelato artesanal (artigianale) no tiene colores flúor y los sabores están en recipientes con tapa. Si el helado está en montañas de colores brillantes, es industrial." },
+        { "subtitle": "Café romano", "text": "El espresso en Roma es más corto y concentrado que en España. El capuchino se toma solo en el desayuno. El caffè macchiato (manchado de leche) es una buena alternativa durante el día." }
       ]
     },
     {
-      "title": "🛡️ Seguridad y salud",
+      "icon": "🛡️",
+      "title": "Seguridad y salud",
       "items": [
-        {
-          "subtitle": "Carteristas",
-          "text": "Vigilad las pertenencias en el metro (especialmente línea A), en las zonas de alta afluencia turística (Coliseo, Fontana di Trevi, Vaticano) y en el transporte público. Usad riñonera o bolso cruzado con cierre."
-        },
-        {
-          "subtitle": "Calor de junio",
-          "text": "Junio en Roma puede superar los 30 °C. Protección solar 50+, gorra, gafas de sol y botella de agua son imprescindibles. Planificad las visitas al aire libre por la mañana temprano o a última hora de la tarde."
-        },
-        {
-          "subtitle": "Emergencias en Italia",
-          "text": "Emergencias: 112 (número europeo único). Policía: 113. Bomberos: 115. Ambulancia: 118. Hospital más cercano al Trastevere: Ospedale San Camillo-Forlanini. La Tarjeta Sanitaria Europea (TSE) cubre la asistencia básica."
-        },
-        {
-          "subtitle": "Taxistas ilegales",
-          "text": "En el aeropuerto ignorad a cualquier persona que os ofrezca taxi dentro del terminal. Los taxis oficiales son blancos con taxímetro y tienen tarifa fija de 55 € desde Fiumicino al centro."
-        }
+        { "subtitle": "Carteristas", "text": "Vigilad las pertenencias en el metro (especialmente línea A), zonas de alta afluencia turística (Coliseo, Fontana di Trevi, Vaticano) y transporte público. Usad riñonera o bolso cruzado con cierre." },
+        { "subtitle": "Calor de junio", "text": "Junio en Roma puede superar los 30 °C. Protección solar 50+, gorra, gafas de sol y botella de agua son imprescindibles. Planificad visitas al aire libre por la mañana temprano o a última hora de la tarde." },
+        { "subtitle": "Taxistas ilegales", "text": "En el aeropuerto ignorad a cualquier persona que os ofrezca taxi dentro del terminal. Los taxis oficiales son blancos con taxímetro y tienen tarifa fija de 55 € desde Fiumicino al centro." }
       ]
     },
     {
-      "title": "🎒 Qué llevar",
+      "icon": "🎒",
+      "title": "Qué llevar",
       "items": [
-        {
-          "subtitle": "Calzado cómodo es lo más importante",
-          "text": "Roma tiene más de 4.000 años de adoquines. Los tacones y las sandalias de moda destruirán vuestros pies antes del mediodía. Zapatillas deportivas cómodas o sandalias con suela gruesa son imprescindibles."
-        },
-        {
-          "subtitle": "Ropa para templos y museos",
-          "text": "Hombros y rodillas cubiertos son obligatorios en el Vaticano, el Panteón y muchas iglesias. Llevad un pañuelo o camiseta fina en el bolso para cubriros a la entrada."
-        },
-        {
-          "subtitle": "Adaptador tipo L",
-          "text": "Italia usa tres tipos de enchufe: C (compatible con España), F (Schuko, compatible) y L (tres clavijas en línea, exclusivo de Italia y Chile). Los Airbnb suelen tener mezcla de los tres. Un adaptador tipo L os evitará sorpresas."
-        }
+        { "subtitle": "Calzado cómodo es lo más importante", "text": "Roma tiene más de 4.000 años de adoquines. Los tacones y sandalias de moda destruirán vuestros pies antes del mediodía. Zapatillas deportivas cómodas o sandalias con suela gruesa son imprescindibles." },
+        { "subtitle": "Ropa para templos y museos", "text": "Hombros y rodillas cubiertos son obligatorios en el Vaticano, el Panteón y muchas iglesias. Llevad un pañuelo o camiseta fina en el bolso para cubriros." },
+        { "subtitle": "Adaptador tipo L", "text": "Italia usa tres tipos de enchufe: C y F (compatibles con España) y L (tres clavijas en línea, exclusivo de Italia). Los Airbnb suelen tener mezcla de los tres. Un adaptador tipo L os evitará sorpresas." }
       ]
     },
     {
-      "title": "☀️ Clima y ropa",
+      "icon": "☀️",
+      "title": "Clima y ropa",
       "items": [
-        {
-          "subtitle": "Junio en Roma",
-          "text": "Temperaturas entre 18°C (noche) y 28-30°C (mediodía). Ropa ligera de verano para el día: camisetas, vestidos, shorts. Para la noche algo de manga larga puede ser útil. Probabilidad de lluvia baja (~9% días)."
-        },
-        {
-          "subtitle": "Sol intenso",
-          "text": "Las horas de sol en junio son casi 10 al día. La luz del amanecer y el atardecer son espectaculares para fotografiar monumentos. El mediodía entre las 13:00 y las 16:00 conviene pasarlo bajo techado o en restaurantes."
-        }
+        { "subtitle": "Junio en Roma", "text": "Temperaturas entre 18 °C (noche) y 28–30 °C (mediodía). Ropa ligera de verano para el día. Para la noche algo de manga larga puede ser útil. Probabilidad de lluvia baja (~9% de los días)." },
+        { "subtitle": "Sol intenso", "text": "Las horas de sol en junio son casi 10 al día. El mediodía entre las 13:00 y las 16:00 conviene pasarlo bajo techado o en restaurantes. La luz del amanecer y el atardecer son espectaculares para fotografiar." }
       ]
     },
     {
-      "title": "📸 Fotografía y momentos",
+      "icon": "📸",
+      "title": "Fotografía y miradores",
       "items": [
-        {
-          "subtitle": "Las mejores horas para fotografiar",
-          "text": "La hora dorada (golden hour) es de 6:30 a 7:30 y de 19:30 a 20:30 en junio. El Coliseo, el Panteón y la Fontana di Trevi a esas horas, sin multitudes, son imágenes imposibles de conseguir al mediodía."
-        },
-        {
-          "subtitle": "Mirador del Gianicolo",
-          "text": "La colina del Gianicolo, a 15 minutos a pie del Trastevere hacia arriba, ofrece la mejor panorámica de Roma: la cúpula de San Pedro, el Quirinale, el Vittoriano. Perfecta para el atardecer."
-        }
+        { "subtitle": "Las mejores horas para fotografiar", "text": "La hora dorada es de 6:30 a 7:30 y de 19:30 a 20:30 en junio. El Coliseo, el Panteón y la Fontana di Trevi a esas horas, sin multitudes, dan imágenes imposibles de conseguir al mediodía." },
+        { "subtitle": "Mirador del Gianicolo", "text": "La colina del Gianicolo, a 15 min a pie del Trastevere hacia arriba, ofrece la mejor panorámica de Roma: la cúpula de San Pedro, el Quirinale, el Vittoriano. Perfecta para el atardecer." }
       ]
     }
   ],
+  "emergency": {
+    "local_emergency": "112 (número europeo único: policía, ambulancia, bomberos)",
+    "medical": "118 (ambulancias Italia) · Ospedale San Camillo-Forlanini (hospital más cercano al Trastevere)",
+    "police": "113 (Policía nacional italiana) · 112 (emergencias generales)",
+    "embassy": "Embajada de España en Roma: +39 06 684 0401 · Calle del Quirinale 4. Consulado: +39 06 4204 0454 · Via Campo Marzio 34.",
+    "insurance_reminder": "La Tarjeta Sanitaria Europea (TSE) cubre la asistencia básica en Italia. Llevadla siempre encima."
+  },
   "apps_recommended": [
-    {
-      "name": "Trenitalia",
-      "platform": "iOS / Android",
-      "use": "Comprar billetes del tren regional FL1 al aeropuerto y validarlos en el móvil.",
-      "free": true,
-      "url": "https://www.trenitalia.com"
-    },
-    {
-      "name": "Google Maps",
-      "platform": "iOS / Android",
-      "use": "Navegación peatonal por Roma. Descargad el mapa offline antes de salir.",
-      "free": true,
-      "url": "https://maps.google.com"
-    },
-    {
-      "name": "Moovit",
-      "platform": "iOS / Android",
-      "use": "Transporte público romano en tiempo real: buses, tranvías, metro. Más fiable que Google Maps para rutas urbanas italianas.",
-      "free": true,
-      "url": "https://moovit.com"
-    },
-    {
-      "name": "museivaticani.va",
-      "platform": "Web",
-      "use": "Reservar entradas oficiales a los Museos Vaticanos. Hacedlo con 2-3 semanas de antelación.",
-      "free": false,
-      "url": "https://www.museivaticani.va"
-    },
-    {
-      "name": "colosseo.it",
-      "platform": "Web",
-      "use": "Web oficial del Parco Archeologico del Colosseo para entradas en días normales.",
-      "free": false,
-      "url": "https://colosseo.it"
-    },
-    {
-      "name": "XE Currency",
-      "platform": "iOS / Android",
-      "use": "Convertidor de divisas en tiempo real para controlar el gasto.",
-      "free": true,
-      "url": "https://www.xe.com"
-    },
-    {
-      "name": "TheFork (ElTenedor)",
-      "platform": "iOS / Android",
-      "use": "Reservas de restaurante en Roma con descuentos frecuentes del 20-50%.",
-      "free": true,
-      "url": "https://www.thefork.es"
-    }
+    { "name": "Trenitalia", "purpose": "Comprar billetes del tren FL1 al aeropuerto y validarlos en el móvil." },
+    { "name": "Google Maps (offline)", "purpose": "Navegación peatonal por Roma. Descargad el mapa offline antes de salir." },
+    { "name": "Moovit", "purpose": "Transporte público romano en tiempo real: buses, tranvías, metro. Más fiable que Google Maps para rutas italianas." },
+    { "name": "TheFork (ElTenedor)", "purpose": "Reservas de restaurante con descuentos frecuentes del 20–50%." },
+    { "name": "XE Currency", "purpose": "Convertidor de divisas en tiempo real para controlar el gasto." }
   ],
   "packing_list": {
     "summer_clothing": [
-      "Camisetas manga corta (4-5)",
+      "Camisetas manga corta (4–5)",
       "Vestidos o blusas ligeras",
       "Pantalón corto o falda",
-      "Camiseta fina de manga larga (para templos y noches)",
-      "Ropa interior y calcetines"
+      "Camiseta fina de manga larga (para templos y noches frescas)"
     ],
     "footwear": [
       "Zapatillas deportivas muy cómodas (imprescindible)",
       "Sandalia con suela gruesa",
       "Chancla para el alojamiento"
     ],
+    "underwear": [
+      "Ropa interior (4 días + 1 extra)",
+      "Calcetines (4 pares)",
+      "Pijama ligero"
+    ],
     "accessories": [
       "Gorra o sombrero",
       "Gafas de sol",
-      "Bolso cruzado con cierre (anticarteristas)",
       "Pañuelo o chal ligero (para templos)"
     ],
     "items": [
       "Móvil y cargador",
       "Batería externa",
-      "Adaptador tipo L (Italia)",
+      "Adaptador tipo L para Italia",
       "Auriculares",
       "Botella de agua reutilizable",
-      "Paraguas compacto"
+      "Paraguas compacto",
+      "Riñonera o bolso cruzado con cierre"
     ],
     "documents": [
       "DNI (válido para Italia como país UE)",
@@ -1807,7 +1617,7 @@ input, textarea, select { font-family: inherit; font-size: 16px; }
       "Tarjeta Sanitaria Europea (TSE)",
       "Billetes de vuelo (digital o impreso)",
       "Reserva del Airbnb",
-      "Reserva Museos Vaticanos"
+      "Reserva Museos Vaticanos (imprescindible)"
     ],
     "toiletries": [
       "Crema solar SPF 50+",
@@ -1825,13 +1635,13 @@ input, textarea, select { font-family: inherit; font-size: 16px; }
       "Protector gástrico"
     ]
   },
-  "emergency_contacts": [
-    { "name": "Emergencias Europa (112)", "phone": "112", "note": "Policía, ambulancia, bomberos" },
-    { "name": "Policía Italia (113)", "phone": "113", "note": "Policía nacional italiana" },
-    { "name": "Ambulancia Italia (118)", "phone": "118", "note": "Urgencias médicas" },
-    { "name": "Embajada España en Roma", "phone": "+39 06 684 0401", "note": "Calle del Quirinale 4, Roma" },
-    { "name": "Consulado España en Roma", "phone": "+39 06 4204 0454", "note": "Via Campo Marzio 34, Roma" }
-  ]
+  "generation_metadata": {
+    "generated_at": "2026-05-10T00:00:00Z",
+    "schema_version": "1.2",
+    "claude_model": "claude-sonnet-4-6",
+    "web_search_count": 7,
+    "verification_note": "Precios y horarios verificados en mayo 2026. Verificar in situ especialmente: horarios de restaurantes, Castel Sant'Angelo y Ivo a Trastevere."
+  }
 }
 
 </script>
