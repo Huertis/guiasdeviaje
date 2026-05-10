@@ -1,1 +1,3158 @@
-hoka
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#C65D3A">
+<title>Guía Interactiva de Viaje</title>
+
+<!-- PWA: permite "Añadir a pantalla de inicio" en iOS y Android como app fullscreen -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Guía">
+
+<!-- Icono para pantalla de inicio (una brújula mediterránea en SVG data URL) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%23C65D3A'/><circle cx='90' cy='90' r='55' fill='none' stroke='%23FAF4E8' stroke-width='4'/><polygon points='90,45 100,90 90,135 80,90' fill='%23FAF4E8'/><polygon points='45,90 90,100 135,90 90,80' fill='%23E6A23C' opacity='0.85'/><circle cx='90' cy='90' r='6' fill='%23FAF4E8'/></svg>">
+
+<!-- Web App Manifest embebido como data URL (funciona en Chrome/Edge Android) -->
+<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Gu%C3%ADa%20de%20viaje%22%2C%22short_name%22%3A%22Gu%C3%ADa%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FAF4E8%22%2C%22theme_color%22%3A%22%23C65D3A%22%2C%22orientation%22%3A%22portrait%22%2C%22start_url%22%3A%22.%22%7D">
+
+<!-- Leaflet para el mapa interactivo -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+
+<!-- Tipografías -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   TOKENS — paleta editorial mediterránea
+   ========================================================= */
+:root {
+  --c-terracotta: #C65D3A;
+  --c-terracotta-dark: #A34A2C;
+  --c-teal: #0F4C5C;
+  --c-teal-dark: #0A3540;
+  --c-cream: #FAF4E8;
+  --c-cream-2: #F2EADB;
+  --c-gold: #E6A23C;
+  --c-ink: #1A1A1A;
+  --c-ink-soft: #3A3A3A;
+  --c-muted: #6B6B6B;
+  --c-line: #E5DCC8;
+  --c-danger: #B84A3A;
+  --c-success: #4A7C59;
+
+  --bg: var(--c-cream);
+  --bg-card: #FFFFFF;
+  --bg-elev: var(--c-cream-2);
+  --text: var(--c-ink);
+  --text-soft: var(--c-ink-soft);
+  --text-muted: var(--c-muted);
+  --line: var(--c-line);
+  --accent: var(--c-terracotta);
+  --accent-ink: #FFFFFF;
+  --brand: var(--c-teal);
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+
+  --shadow-sm: 0 1px 2px rgba(26,26,26,0.04), 0 1px 3px rgba(26,26,26,0.06);
+  --shadow: 0 4px 12px rgba(26,26,26,0.08), 0 2px 4px rgba(26,26,26,0.04);
+  --shadow-lg: 0 12px 32px rgba(26,26,26,0.12), 0 4px 8px rgba(26,26,26,0.06);
+
+  --tabbar-height: 68px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --bg: #14110E;
+  --bg-card: #1F1B15;
+  --bg-elev: #2A251D;
+  --text: #F2EADB;
+  --text-soft: #D4CAB4;
+  --text-muted: #9A9485;
+  --line: #2F2921;
+  --accent: #E07A57;
+  --accent-ink: #14110E;
+  --brand: #4A9CAE;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.6);
+}
+
+/* =========================================================
+   RESET & BASE
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-bottom: calc(var(--tabbar-height) + var(--safe-bottom));
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0; }
+h1 { font-size: clamp(28px, 7vw, 42px); }
+h2 { font-size: clamp(22px, 5.5vw, 30px); }
+h3 { font-size: 19px; }
+h4 { font-size: 16px; }
+p { margin: 0 0 12px; color: var(--text-soft); }
+small { color: var(--text-muted); }
+a { color: var(--accent); text-decoration: none; }
+button { font-family: inherit; border: none; cursor: pointer; background: none; color: inherit; }
+input, textarea, select { font-family: inherit; font-size: 16px; }
+
+/* =========================================================
+   LAYOUT — header + páginas + tabbar
+   ========================================================= */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: calc(14px + var(--safe-top)) 20px 14px;
+  background: var(--bg);  /* fallback opaco para navegadores sin color-mix */
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+@supports (background: color-mix(in srgb, red, blue)) {
+  .app-header {
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+  }
+}
+.app-header__title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+.app-header__actions { display: flex; gap: 4px; }
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--text-soft);
+  transition: background var(--transition);
+}
+.icon-btn:hover, .icon-btn:active { background: var(--bg-elev); }
+.icon-btn svg { width: 20px; height: 20px; }
+
+.page { display: none; padding: 20px 20px 40px; max-width: 720px; margin: 0 auto; }
+.page.is-active { display: block; animation: fade-in 240ms ease; }
+@keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Tabbar inferior */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: calc(var(--tabbar-height) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--bg-card);  /* fallback opaco */
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+@supports (background: color-mix(in srgb, red, blue)) {
+  .tabbar {
+    background: color-mix(in srgb, var(--bg-card) 96%, transparent);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+  }
+}
+.tabbar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 8px 4px;
+  transition: color var(--transition);
+  position: relative;
+}
+.tabbar__item svg { width: 22px; height: 22px; }
+.tabbar__item.is-active { color: var(--accent); }
+.tabbar__item.is-active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--accent);
+}
+
+/* =========================================================
+   HOME
+   ========================================================= */
+.hero {
+  position: relative;
+  padding: 28px 22px 30px;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 85% 15%, rgba(230,162,60,0.22), transparent 55%),
+    linear-gradient(135deg, var(--c-teal) 0%, var(--c-teal-dark) 100%);
+  color: #F6EED9;
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+.hero--with-image {
+  padding: 40px 22px 30px;
+  /* Mantiene el gradient base como fallback si la imagen no carga (404, red lenta) */
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.hero--with-image .hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+.hero--with-image .hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+}
+.hero--with-image > *:not(.hero__bg) {
+  position: relative;
+  z-index: 1;
+}
+.hero--with-image .hero__title,
+.hero--with-image .hero__subtitle,
+.hero--with-image .hero__meta {
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.90 0 0 0 0 0.80 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.55;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+.hero__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-gold);
+  margin-bottom: 14px;
+}
+.hero__title {
+  color: #FAF4E8;
+  font-size: clamp(28px, 7vw, 38px);
+  margin-bottom: 6px;
+}
+.hero__subtitle {
+  color: rgba(250,244,232,0.85);
+  font-size: 15px;
+  line-height: 1.45;
+  margin-bottom: 18px;
+}
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  font-size: 13px;
+  color: rgba(250,244,232,0.75);
+}
+.hero__meta-item { display: flex; align-items: center; gap: 6px; }
+
+.today-card {
+  margin-bottom: 22px;
+  padding: 18px 20px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+.today-card__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.today-card__title { font-size: 17px; font-weight: 600; font-family: var(--font-display); margin-bottom: 6px; }
+.today-card__summary { font-size: 14px; color: var(--text-soft); margin: 0 0 12px; }
+.today-card__link { font-size: 13px; font-weight: 700; color: var(--accent); }
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  margin: 28px 0 14px;
+  letter-spacing: -0.01em;
+}
+.section-title--small { font-size: 18px; margin: 22px 0 10px; }
+
+.props-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 520px) { .props-grid { grid-template-columns: 1fr 1fr; } }
+
+.prop-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.prop-card:active { transform: scale(0.98); }
+.prop-card__icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: var(--bg-elev);
+  border-radius: 10px;
+}
+.prop-card__title { font-size: 14px; font-weight: 700; margin-bottom: 2px; font-family: var(--font-body); }
+.prop-card__text { font-size: 13px; color: var(--text-soft); line-height: 1.45; }
+
+/* Historia colapsable */
+.history {
+  padding: 18px 20px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+.history__summary { font-size: 14px; color: var(--text-soft); margin: 0 0 10px; }
+.history__toggle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.history__detail { display: none; margin-top: 14px; border-top: 1px solid var(--line); padding-top: 14px; }
+.history.is-open .history__detail { display: block; }
+.history.is-open .history__toggle .chev { transform: rotate(180deg); }
+.chev { transition: transform 220ms ease; display: inline-block; }
+.history__period { margin-bottom: 14px; }
+.history__period-range {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 700;
+}
+.history__period-title { font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 2px 0 6px; }
+.history__period-text { font-size: 13.5px; color: var(--text-soft); line-height: 1.55; }
+
+/* =========================================================
+   DÍAS — lista y detalle
+   ========================================================= */
+.days-list { display: flex; flex-direction: column; gap: 10px; }
+.day-card {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  text-align: left;
+  width: 100%;
+  transition: transform var(--transition), border-color var(--transition);
+}
+.day-card:active { transform: scale(0.985); border-color: var(--accent); }
+.day-card__num {
+  flex-shrink: 0;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elev);
+  border-radius: 10px;
+  padding: 8px 4px;
+}
+.day-card__num-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
+.day-card__num-value { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--accent); line-height: 1; }
+.day-card__date { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 3px; }
+.day-card__title { font-family: var(--font-display); font-size: 16px; font-weight: 600; margin-bottom: 4px; line-height: 1.25; }
+.day-card__summary { font-size: 13px; color: var(--text-soft); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.day-card__progress { margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); }
+.progress-bar { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.progress-bar__fill { height: 100%; background: var(--c-success); transition: width 300ms ease; }
+
+/* Detalle día */
+.day-detail__head {
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.day-detail__eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 4px; }
+.day-detail__title { font-family: var(--font-display); font-size: 26px; font-weight: 600; line-height: 1.15; margin-bottom: 12px; }
+.day-detail__logistics {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+.day-detail__logistics-item { display: flex; align-items: center; gap: 5px; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: var(--line);
+}
+.tl-item {
+  position: relative;
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 14px 14px 16px;
+  transition: border-color var(--transition), opacity var(--transition);
+}
+.tl-item.is-done { opacity: 0.55; }
+.tl-item.is-done .tl-item__title { text-decoration: line-through; }
+.tl-item::before {
+  content: attr(data-icon);
+  position: absolute;
+  left: -33px;
+  top: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--accent);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.tl-item__head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.tl-item__time {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+.tl-item__check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: var(--bg);
+  transition: all var(--transition);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.tl-item__check:hover { border-color: var(--accent); }
+.tl-item.is-done .tl-item__check { background: var(--c-success); border-color: var(--c-success); }
+.tl-item.is-done .tl-item__check::after {
+  content: "✓";
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+.tl-item__title { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.tl-item__description { font-size: 13.5px; color: var(--text-soft); line-height: 1.5; }
+.tl-item__place {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 8px;
+}
+
+/* Ficha de lugar */
+.place-card {
+  background: var(--bg-elev);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-top: 14px;
+}
+.place-card__name { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.place-card__review { font-size: 13px; color: var(--text-soft); line-height: 1.55; margin-bottom: 10px; }
+.place-card__meta { display: grid; grid-template-columns: 1fr; gap: 6px; font-size: 12.5px; margin-bottom: 10px; }
+.place-card__meta-item { display: flex; gap: 6px; }
+.place-card__meta-label { color: var(--text-muted); font-weight: 600; flex-shrink: 0; }
+.place-card__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: transform var(--transition), background var(--transition);
+}
+.btn:active { transform: scale(0.96); }
+.btn--primary { background: var(--accent); color: var(--accent-ink); }
+.btn--ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+.btn--sm { padding: 6px 12px; font-size: 12px; }
+.btn svg { width: 14px; height: 14px; }
+
+/* Restaurantes */
+.restaurants { margin-top: 20px; }
+.rest-card {
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+}
+.rest-card__head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.rest-card__name { font-weight: 700; font-size: 14.5px; }
+.rest-card__price { font-family: var(--font-display); color: var(--accent); font-weight: 700; font-size: 14px; }
+.rest-card__spec { font-size: 13px; color: var(--text-soft); }
+.rest-card__meal { display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; background: var(--bg-elev); padding: 2px 8px; border-radius: 999px; color: var(--text-muted); margin-top: 6px; }
+
+/* Planes alternativos */
+.alt-plans { margin-top: 20px; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; }
+.alt-plan { padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.alt-plan:last-child { border-bottom: none; }
+.alt-plan__label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--accent); margin-bottom: 3px; }
+.alt-plan__text { font-size: 13px; color: var(--text-soft); line-height: 1.5; }
+
+/* Info complementaria */
+.info-block { margin-top: 20px; }
+.info-block__title { font-size: 14px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.info-block__list { list-style: none; padding: 0; margin: 0; }
+.info-block__list li { font-size: 13px; color: var(--text-soft); padding: 6px 0; border-bottom: 1px dashed var(--line); line-height: 1.45; }
+.info-block__list li:last-child { border-bottom: none; }
+
+/* Notas del día */
+.day-notes { margin-top: 24px; background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; }
+.day-notes__label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 6px; }
+.day-notes__textarea {
+  width: 100%;
+  min-height: 80px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Navegación entre días */
+.day-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.day-nav__btn {
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--accent);
+  background: var(--bg-card);
+  border: 1.5px solid var(--accent);
+  transition: background var(--transition), transform var(--transition);
+}
+.day-nav__btn:active { transform: scale(0.96); background: var(--bg-elev); }
+.day-nav__btn--next { margin-left: auto; }
+
+/* =========================================================
+   MAPA
+   ========================================================= */
+#map-container { position: relative; height: calc(100dvh - var(--tabbar-height) - var(--safe-bottom) - var(--safe-top) - 120px); min-height: 300px; max-height: 700px; margin: 0 -20px; border-radius: 0; }
+@supports not (height: 100dvh) {
+  #map-container { height: calc(100vh - var(--tabbar-height) - var(--safe-bottom) - 140px); }
+}
+#map { height: 100%; width: 100%; }
+.map-legend {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  z-index: 500;
+  background: color-mix(in srgb, var(--bg-card) 95%, transparent);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text-soft);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+}
+.leaflet-popup-content-wrapper { border-radius: var(--radius) !important; }
+.leaflet-popup-content { font-family: var(--font-body) !important; margin: 12px 14px !important; }
+.leaflet-popup-content strong { font-family: var(--font-display); font-size: 14px; }
+
+/* =========================================================
+   CONSEJOS
+   ========================================================= */
+.tip-group { margin-bottom: 16px; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; }
+.tip-group__head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  text-align: left;
+}
+.tip-group__head-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.tip-group__icon { font-size: 22px; }
+.tip-group__title { font-family: var(--font-display); font-size: 17px; font-weight: 600; }
+.tip-group__body { display: none; padding: 0 16px 12px; }
+.tip-group.is-open .tip-group__body { display: block; }
+.tip-group.is-open .chev { transform: rotate(180deg); }
+.tip-item { padding: 10px 0; border-top: 1px solid var(--line); }
+.tip-item__subtitle { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.tip-item__text { font-size: 13px; color: var(--text-soft); line-height: 1.5; }
+
+/* =========================================================
+   YO — checklist, notas, presupuesto, packing
+   ========================================================= */
+.me-tabs { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.me-tabs::-webkit-scrollbar { display: none; }
+.me-tab {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1.5px solid var(--line);
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.me-tab.is-active { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+.me-pane { display: none; }
+.me-pane.is-active { display: block; }
+
+/* Stats globales */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+.stat-card { padding: 14px 10px; background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); text-align: center; }
+.stat-card__value { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+.stat-card__label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+/* Presupuesto */
+.budget-summary { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+.budget-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.budget-row__label { font-size: 13px; color: var(--text-soft); }
+.budget-row__value { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+.budget-row--total { padding-top: 10px; border-top: 1px solid var(--line); }
+.budget-row--total .budget-row__value { font-size: 22px; color: var(--accent); }
+.budget-progress { height: 8px; background: var(--bg-elev); border-radius: 4px; overflow: hidden; margin-top: 6px; }
+.budget-progress__fill { height: 100%; background: linear-gradient(90deg, var(--c-success), var(--c-gold)); transition: width 400ms ease; }
+.budget-progress__fill.is-over { background: linear-gradient(90deg, var(--c-gold), var(--c-danger)); }
+
+.expense-form {
+  display: grid;
+  grid-template-columns: 1fr 90px 110px auto;
+  gap: 6px;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+}
+.expense-form input, .expense-form select {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  min-width: 0;
+}
+.expense-form button { background: var(--accent); color: var(--accent-ink); border-radius: 8px; font-weight: 700; padding: 8px 14px; font-size: 13px; }
+.expense-list { list-style: none; padding: 0; margin: 0; }
+.expense-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+}
+.expense-item__desc { font-size: 13.5px; }
+.expense-item__cat { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.expense-item__amount { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.expense-item__del { color: var(--c-danger); font-size: 12px; font-weight: 700; margin-left: 6px; }
+
+/* Packing */
+.packing-group { margin-bottom: 16px; }
+.packing-group__title { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.packing-group__title::before { content: ""; width: 4px; height: 16px; background: var(--accent); border-radius: 2px; }
+.packing-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+.packing-item.is-packed { opacity: 0.5; }
+.packing-item.is-packed .packing-item__text { text-decoration: line-through; }
+.packing-item__box {
+  width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--line);
+  display: grid; place-items: center; flex-shrink: 0; transition: all var(--transition);
+}
+.packing-item.is-packed .packing-item__box { background: var(--c-success); border-color: var(--c-success); }
+.packing-item.is-packed .packing-item__box::after { content: "✓"; color: white; font-size: 12px; font-weight: 700; }
+.packing-item__text { font-size: 14px; }
+
+/* Packing editable */
+.packing-item {
+  position: relative;
+}
+.packing-item__edit {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  padding: 2px 4px;
+  outline: none;
+  min-width: 0;
+  border-radius: 4px;
+  transition: background var(--transition);
+}
+.packing-item__edit:focus {
+  background: var(--bg-elev);
+}
+.packing-item.is-packed .packing-item__edit {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+.packing-item__remove {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  color: var(--c-danger);
+  opacity: 0.4;
+  transition: opacity var(--transition), background var(--transition);
+}
+.packing-item__remove:hover, .packing-item__remove:active {
+  opacity: 1;
+  background: rgba(184,74,58,0.1);
+}
+.packing-add-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 0 12px 4px;
+}
+.packing-add-input {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+.packing-add-input:focus { border-style: solid; border-color: var(--accent); }
+.packing-add-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 16px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+/* Conversor */
+.tool-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; }
+.tool-card__title { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+.tool-card__row { display: grid; grid-template-columns: 1fr 80px; gap: 8px; margin-bottom: 8px; }
+.tool-card input, .tool-card select { padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); width: 100%; }
+.tool-card__result {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  text-align: right;
+}
+
+/* Weather */
+.weather-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+.weather-grid::-webkit-scrollbar { display: none; }
+.weather-day {
+  flex: 0 0 90px;
+  padding: 12px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  text-align: center;
+}
+.weather-day__date { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 4px; }
+.weather-day__icon { font-size: 26px; margin: 4px 0; }
+.weather-day__temp { font-family: var(--font-display); font-size: 14px; font-weight: 700; }
+.weather-day__temp-min { color: var(--text-muted); font-weight: 400; }
+
+/* =========================================================
+   MODAL DE BÚSQUEDA
+   ========================================================= */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);  /* fallback opaco */
+  z-index: 100;
+  padding: calc(20px + var(--safe-top)) 20px 20px;
+  display: none;
+  overflow-y: auto;
+}
+@supports (background: color-mix(in srgb, red, blue)) {
+  .search-overlay {
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+.search-overlay.is-open { display: block; animation: fade-in 180ms ease; }
+.search-overlay__head { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; }
+.search-overlay__input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+}
+.search-overlay__input:focus { border-color: var(--accent); }
+.search-results { display: flex; flex-direction: column; gap: 6px; }
+.search-result {
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.search-result:hover { border-color: var(--accent); }
+.search-result__type { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; }
+.search-result__title { font-weight: 700; font-size: 14px; margin: 2px 0; }
+.search-result__snippet { font-size: 12.5px; color: var(--text-soft); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* =========================================================
+   MISC
+   ========================================================= */
+.empty-state { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 14px; }
+.divider { height: 1px; background: var(--line); margin: 20px 0; border: none; }
+
+@media (min-width: 640px) {
+  .props-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .expense-form { grid-template-columns: 2fr 1fr 1fr auto; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+<header class="app-header">
+  <div class="app-header__title" id="header-title">Guía de viaje</div>
+  <div class="app-header__actions">
+    <button class="icon-btn" id="btn-search" aria-label="Buscar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+    </button>
+    <button class="icon-btn" id="btn-theme" aria-label="Tema">
+      <svg id="icon-theme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+    </button>
+  </div>
+</header>
+
+<!-- =========================================================
+     PÁGINAS
+     ========================================================= -->
+
+<!-- HOME -->
+<main class="page is-active" id="page-home"></main>
+
+<!-- DÍAS (lista) -->
+<main class="page" id="page-days"></main>
+
+<!-- DÍA DETALLE -->
+<main class="page" id="page-day"></main>
+
+<!-- MAPA -->
+<main class="page" id="page-map">
+  <h2 class="section-title" style="margin-top:0">Mapa del viaje</h2>
+  <div id="map-container">
+    <div id="map"></div>
+    <div class="map-legend">Toca un marcador para ver detalles. Los números indican el día de visita.</div>
+  </div>
+</main>
+
+<!-- CONSEJOS -->
+<main class="page" id="page-tips"></main>
+
+<!-- YO -->
+<main class="page" id="page-me"></main>
+
+<!-- =========================================================
+     SEARCH OVERLAY
+     ========================================================= -->
+<div class="search-overlay" id="search-overlay">
+  <div class="search-overlay__head">
+    <input class="search-overlay__input" id="search-input" placeholder="Buscar lugares, consejos, restaurantes…" autocomplete="off">
+    <button class="icon-btn" id="search-close" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+    </button>
+  </div>
+  <div class="search-results" id="search-results"></div>
+</div>
+
+<!-- =========================================================
+     TABBAR
+     ========================================================= -->
+<nav class="tabbar">
+  <button class="tabbar__item is-active" data-tab="home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    Inicio
+  </button>
+  <button class="tabbar__item" data-tab="days">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+    Días
+  </button>
+  <button class="tabbar__item" data-tab="map">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+    Mapa
+  </button>
+  <button class="tabbar__item" data-tab="tips">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-4 12.74V17h8v-2.26A7 7 0 0 0 12 2z"></path></svg>
+    Consejos
+  </button>
+  <button class="tabbar__item" data-tab="me">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+    Yo
+  </button>
+</nav>
+
+<!-- =========================================================
+     DATOS DE LA GUÍA (JSON embebido)
+     ========================================================= -->
+<script type="application/json" id="guide-data">
+{
+  "meta": {
+    "title": "Roma · Junio 2026",
+    "destination": "Roma, Italia",
+    "origin": "Valencia, España",
+    "dates": "6–9 junio 2026",
+    "travelers": 2,
+    "travel_style": "Intenso · Historia y arqueología · Barrios y terrazas",
+    "currency": "EUR",
+    "cover_image": "cover.jpg",
+    "total_estimated": {
+      "amount": 700,
+      "breakdown": {
+        "Vuelos (ya pagados)": "200 € (100 € × 2)",
+        "Alojamiento (ya pagado)": "300 €",
+        "Museos y entradas": "~60 €",
+        "Comidas y cenas": "~220 €",
+        "Transporte aeropuerto": "~32 €",
+        "Transporte urbano": "~20 €",
+        "Varios y compras": "~50 €"
+      },
+      "verified_at": "2026-05-10",
+      "notes": "El total ya pagado asciende a 500 €. El gasto estimado pendiente es de ~200 € por persona. Los precios de museos y restaurantes son orientativos; verifica in situ."
+    }
+  },
+  "summary": [
+    { "day": 1, "summary": "Tarde de llegada, primera impresión del Trastevere y cena en el barrio más auténtico de Roma." },
+    { "day": 2, "summary": "Vaticano completo: Museos, Capilla Sixtina y Basílica de San Pedro. Tarde libre en el barrio." },
+    { "day": 3, "summary": "Domingo gratuito: Panteón, Coliseo, Foro Romano y Palatino sin pagar entrada. Noche en Trastevere." },
+    { "day": 4, "summary": "Última mañana romana: mercado, callejeo y vuelta a Valencia." }
+  ],
+  "history": {
+    "summary": "Roma no es simplemente una ciudad: es una acumulación de siglos superpuestos donde cada adoquín esconde una historia. Caminar por el Trastevere —vuestro barrio base— es pisar el suelo que pisaron obreros, artesanos y gladiadores. Y el Coliseo, que visitaréis el domingo de forma gratuita, lleva en pie casi dos mil años como testigo mudo de la ambición humana.",
+    "periods": [
+      {
+        "title": "La Roma Republicana (509–27 a.C.)",
+        "text": "Antes de emperadores y gladiadores, Roma fue una república gobernada por el Senado desde el Foro Romano —que recorreréis el domingo de vuestra estancia—. El Foro no era solo un espacio político: era el corazón comercial, judicial y social de una ciudad que en el siglo I a.C. ya superaba el millón de habitantes. Julio César fue asesinado en los idus de marzo del 44 a.C. en los escalones del Teatro de Pompeyo, a apenas diez minutos a pie de vuestro alojamiento en el Trastevere. El barrio donde os alojaréis nació precisamente en esta época: *Trans Tiberim*, «al otro lado del Tíber», era entonces una zona de almacenes, talleres y trabajadores llegados de Oriente —sirios, judíos, griegos— que dotaron al barrio de ese carácter mestizo y bohemio que conserva hasta hoy. La comunidad judía romana, una de las más antiguas del mundo, se estableció en las inmediaciones hace más de dos milenios, y su huella es aún visible en el vecino Ghetto Ebraico."
+      },
+      {
+        "title": "El Imperio y el Coliseo (27 a.C.–476 d.C.)",
+        "text": "El 80 d.C. marcó uno de los momentos más espectaculares de la historia romana: la inauguración del Coliseo —Anfiteatro Flavio—, que visitaréis el domingo 8 de junio gratuitamente gracias a la Domenica al Museo. El emperador Tito lo inauguró con cien días de juegos ininterrumpidos en los que se dice murieron cinco mil animales y decenas de gladiadores. Con capacidad para más de cincuenta mil espectadores, la estructura de travertino, hormigón romano y mármol es un prodigio de ingeniería que inspiró estadios hasta el siglo XX. Justo al lado, el Foro Romano que formaréis en la entrada combinada fue durante siglos el centro del mundo conocido: ahí se promulgaron las leyes, se celebraron los triunfos militares y se enterraron los grandes hombres. El Monte Palatino, que también cubre vuestra entrada, es donde según la tradición Rómulo fundó la ciudad y donde después los emperadores construyeron sus palacios. Julio César, Augusto, Nerón y Adriano caminaron por esas piedras que hoy pisaréis vosotras. Y en plena época imperial, el emperador Adriano encargó también la reconstrucción del Panteón —visita gratuita ese mismo domingo— que hoy podemos contemplar casi intacto desde el año 126 d.C., con su cúpula de 43 metros que durante más de mil trescientos años fue la mayor del mundo."
+      },
+      {
+        "title": "La Roma Cristiana y Medieval (siglos IV–XIV)",
+        "text": "Cuando el emperador Constantino legalizó el cristianismo en el año 313, Roma comenzó a transformarse radicalmente. Las antiguas basílicas civiles del Foro se convirtieron en iglesias, los templos paganos fueron consagrados a vírgenes y santos, y el Panteón —vuestro destino del domingo— fue cedido al Papa Bonifacio IV en el año 609, convirtiéndose en la Basílica de Santa María ad Martyres. Fue precisamente esta conversión lo que lo salvó de ser desguazado como el resto de monumentos clásicos. El Trastevere, vuestro barrio, alberga la Basílica de Santa María in Trastevere, una de las más antiguas de Roma, cuyo origen se remonta al siglo III. La iglesia que hoy podéis admirar data en gran parte del siglo XII y sus mosaicos son considerados entre los más hermosos del arte cristiano medieval. Durante la Edad Media, Roma perdió la mitad de su población y el Foro Romano quedó tan abandonado que los romanos empezaron a llamarlo el «Campo Vaccino», el campo de las vacas, porque los animales pastaban entre las columnas de lo que había sido el centro del mundo."
+      },
+      {
+        "title": "El Renacimiento y el Vaticano (siglos XV–XVII)",
+        "text": "Los Papas del Renacimiento convirtieron Roma en la mayor obra de arte de la historia. Cuando el sábado 7 de junio visitéis los Museos Vaticanos y la Capilla Sixtina, estaréis contemplando el fruto de décadas de mecenazgo sin parangón. Sixto IV encargó la Capilla Sixtina en 1473; Julio II encomendó a Miguel Ángel pintarla entre 1508 y 1512 —un trabajo que el artista realizó casi solo, tumbado sobre andamios, sufriendo dolores de cuello y espalda que describiría en cartas desesperadas—. El resultado, el fresco de La Creación de Adán y el Juicio Final, es probablemente la obra más contemplada de la historia del arte. Los Museos Vaticanos reúnen más de cincuenta y cuatro galerías creadas por sucesivos pontífices como contenedores de la mayor colección de arte antiguo del mundo. La Basílica de San Pedro, cuya cúpula podéis ver desde gran parte de Roma, fue diseñada entre otros por Miguel Ángel, Bramante y Bernini, y su construcción duró más de ciento veinte años. La Plaza de San Pedro, con sus columnatas de Bernini abrazando simbólicamente a los fieles, no se terminó hasta 1667."
+      },
+      {
+        "title": "El Gran Tour y la Roma Romántica (siglos XVIII–XIX)",
+        "text": "En el siglo XVIII, Roma se convirtió en la meta obligada del «Grand Tour» europeo: jóvenes aristócratas ingleses, alemanes y españoles peregrinaban a la Ciudad Eterna para completar su educación. Fue en este periodo cuando los grandes monumentos que visitaréis adquirieron su aura romántica: el Coliseo, cubierto de hiedra y frecuentado por pastores, fascinó a Byron, Shelley y Goethe. La Fontana di Trevi, que podréis ver paseando por el centro, fue terminada en 1762 por Nicola Salvi bajo el patrocinio del papa Clemente XII y se convirtió de inmediato en uno de los iconos más fotografiados del mundo. El Trastevere era en esta época un barrio obrero, ruidoso y auténtico, muy distinto a los bulevares aristocráticos del centro: precisamente por eso artistas y bohemios lo frecuentaban, estableciendo la reputación de barrio de creadores que conserva hasta hoy."
+      },
+      {
+        "title": "La Roma Moderna y el Trastevere Contemporáneo (siglo XX–hoy)",
+        "text": "En 1870, con la unificación de Italia, Roma pasó a ser capital del nuevo estado y experimentó una transformación urbana masiva: se abrieron grandes bulevares, se demolieron barrios medievales y se construyeron edificios ministeriales. El Trastevere sobrevivió gracias a su marginalidad: demasiado popular, demasiado laberíntico para ser «modernizado». En el siglo XX el barrio atrajo a la comunidad artística e intelectual romana, y hoy es el epicentro de la vida nocturna de la ciudad. Las pequeñas plazas con mesas en la calle que encontraréis al salir de cenar son herederas directas de esa tradición: el «dolce far niente» romano no es un tópico turístico sino una forma de vida que lleva siglos perfeccionándose entre estas mismas fachadas ocres. El viaje entre Valencia y Roma que hacéis en apenas dos horas habría requerido semanas de navegación a los comerciantes valencianos del siglo XV que frecuentaban los puertos del Mediterráneo. Vosotras lo haréis en avión y aterrizaréis en un Fiumicino construido para las Olimpiadas de 1960 —las mismas en que el maratoniano etíope Abebe Bikila corrió descalzo y ganó el oro pasando por el arco de Constantino, justo al lado del Coliseo que visitaréis."
+      }
+    ]
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "Viernes 6 junio 2026",
+      "title": "Llegada al Trastevere",
+      "theme": "Primera tarde romana",
+      "cover_emoji": "✈️",
+      "timeline": [
+        {
+          "time": "15:15",
+          "title": "Salida de Valencia (VLC)",
+          "description": "Vuelo desde el Aeropuerto de Valencia. Llegada prevista a Roma Fiumicino (FCO) a las 17:20 hora italiana.",
+          "type": "transport",
+          "icon": "✈️"
+        },
+        {
+          "time": "17:20",
+          "title": "Llegada a Roma Fiumicino",
+          "description": "Recogida de equipaje y traslado al Trastevere. Opción recomendada: tren regional FL1 hasta estación Roma Trastevere (8 €/persona, ~40 min). Validar el billete antes de subir al tren.",
+          "type": "transport",
+          "icon": "🚂"
+        },
+        {
+          "time": "18:30",
+          "title": "Check-in en el Airbnb",
+          "description": "Instalación en el alojamiento del Trastevere. Dejad el equipaje y preparaos para explorar el barrio.",
+          "type": "logistics",
+          "icon": "🏠"
+        },
+        {
+          "time": "19:00",
+          "title": "Primer paseo por el Trastevere",
+          "description": "Callejeo libre por el barrio: Plaza Santa Maria in Trastevere, Via della Scala, Piazza Trilussa. El objetivo de esta tarde es empaparte del ambiente, no marcar monumentos.",
+          "type": "activity",
+          "icon": "🚶‍♀️"
+        },
+        {
+          "time": "20:30",
+          "title": "Aperitivo en Piazza Trilussa",
+          "description": "Las terrazas de esta plaza son ideales para el aperitivo romano: Spritz o vino blanco con supplì. Una iniciación perfecta al ritmo de la ciudad.",
+          "type": "food",
+          "icon": "🍷"
+        },
+        {
+          "time": "21:30",
+          "title": "Cena: Tonnarello",
+          "description": "Uno de los restaurantes más queridos del Trastevere desde el siglo XIX. La pasta se sirve en la propia sartén. La cacio e pepe y la carbonara son imprescindibles. Precio medio 18-22 €/persona.",
+          "type": "food",
+          "icon": "🍝"
+        }
+      ],
+      "places": [
+        {
+          "name": "Basílica de Santa María in Trastevere",
+          "type": "Iglesia",
+          "description": "Una de las iglesias más antiguas de Roma (siglo III). Sus mosaicos medievales son extraordinarios y la entrada es gratuita.",
+          "lat": 41.8895,
+          "lng": 12.4697,
+          "price": "Gratis",
+          "hours": "07:30–21:00",
+          "review": "Acceder a primera hora o a última luz del día para evitar grupos de turistas. La plaza exterior es perfecta para el aperitivo.",
+          "verified_at": null,
+          "tips": "Verificar horario in situ; puede cerrar durante misas."
+        },
+        {
+          "name": "Piazza Trilussa",
+          "type": "Plaza",
+          "description": "El corazón de la vida nocturna del Trastevere. Fuente barroca, terrazas y el mejor ambiente de la ciudad al caer la noche.",
+          "lat": 41.8908,
+          "lng": 12.4710,
+          "price": "Gratis",
+          "hours": "Siempre abierta",
+          "review": "El lugar ideal para el primer Spritz romano. Al caer la tarde se llena de locales y viajeros.",
+          "verified_at": "2026-05-10",
+          "tips": null
+        }
+      ],
+      "restaurants": [
+        {
+          "name": "Tonnarello",
+          "meal": "cena",
+          "type": "Trattoria clásica",
+          "price_range": "€€",
+          "address": "Via della Paglia 1, Trastevere",
+          "speciality": "Cacio e pepe, carbonara, pasta in padella",
+          "review": "Institución del Trastevere desde el siglo XIX. La pasta servida en sartén es una experiencia única. Cola habitual pero rota rápido.",
+          "reservation": "Recomendable, especialmente en fin de semana",
+          "verified_at": null,
+          "tips": "Llegar 15 minutos antes de la hora reservada. Aceptan efectivo y tarjeta."
+        }
+      ],
+      "alternative_plans": {
+        "more_time": "Si el vuelo llega sin retrasos y aún hay energía, aprovechad para cruzar el Puente Sisto y pasear hasta el Campo de Fiori por la noche: una de las plazas más animadas de Roma al caer el sol.",
+        "less_time": "Si el vuelo llega tarde o con retraso, simplificad: pizza al taglio en cualquier local del barrio y descanso para el día intenso de mañana.",
+        "rainy_day": "Trastevere bajo la lluvia tiene un encanto especial. Llevad el paraguas y refugiaos en cualquier trattoria; los precios en días de lluvia suelen ser más tranquilos y sin espera."
+      }
+    },
+    {
+      "day": 2,
+      "date": "Sábado 7 junio 2026",
+      "title": "El Vaticano",
+      "theme": "Museos, Capilla Sixtina y Basílica de San Pedro",
+      "cover_emoji": "🏛️",
+      "timeline": [
+        {
+          "time": "07:45",
+          "title": "Desayuno rápido y salida temprana",
+          "description": "Desayunad en cualquier bar del Trastevere: capuchino y cornetto por menos de 3 €. La clave del Vaticano es llegar antes de las 8:30 para evitar las colas del mediodía.",
+          "type": "food",
+          "icon": "☕"
+        },
+        {
+          "time": "08:00",
+          "title": "Traslado al Vaticano",
+          "description": "Desde el Trastevere: autobús 23 o 280 hasta Lungotevere (~15 min) o paseo a pie por el Tíber (~25 min). La entrada de los Museos Vaticanos está en Viale Vaticano.",
+          "type": "transport",
+          "icon": "🚌"
+        },
+        {
+          "time": "08:30",
+          "title": "Museos Vaticanos y Capilla Sixtina",
+          "description": "Reservad entrada con antelación (museivaticani.va) para evitar colas. El recorrido canónico lleva a la Galería de los Mapas, las Estancias de Rafael y finalmente la Capilla Sixtina. Permitid al menos 2,5-3 horas. Precio: ~20 €/persona con reserva.",
+          "type": "activity",
+          "icon": "🎨"
+        },
+        {
+          "time": "11:30",
+          "title": "Basílica de San Pedro",
+          "description": "La entrada a la Basílica es gratuita por la Plaza de San Pedro (cola de seguridad inevitable). Interior monumental, tumba de San Pedro y la Pietà de Miguel Ángel. Podéis subir a la cúpula por 8 € (escaleras) o 10 € (ascensor+escaleras). Vistas privilegiadas sobre Roma.",
+          "type": "activity",
+          "icon": "⛪"
+        },
+        {
+          "time": "13:30",
+          "title": "Comida cerca del Vaticano",
+          "description": "Buscad una trattoria alejada de la Plaza de San Pedro (la zona inmediata es cara y turística). Crossed la Via della Conciliazione y buscad algo en Borgo Pio: precios más ajustados y mejor calidad.",
+          "type": "food",
+          "icon": "🍽️"
+        },
+        {
+          "time": "15:00",
+          "title": "Castel Sant'Angelo",
+          "description": "A cinco minutos del Vaticano, el mausoleo del emperador Adriano reconvertido en fortaleza papal. Maravillosas vistas del Tíber y la ciudad desde la terraza. Entrada: 15 €.",
+          "type": "activity",
+          "icon": "🏰"
+        },
+        {
+          "time": "17:00",
+          "title": "Puente Sant'Angelo y Piazza Navona",
+          "description": "Cruzad el majestuoso puente con sus ángeles barrocos de Bernini. Dirección Piazza Navona, una de las plazas más espectaculares del Barroco romano, con la Fuente de los Cuatro Ríos.",
+          "type": "activity",
+          "icon": "🗿"
+        },
+        {
+          "time": "19:00",
+          "title": "Vuelta al Trastevere y descanso",
+          "description": "El día habrá sido intenso. Regresad al barrio, duchad y recuperad fuerzas antes de la cena.",
+          "type": "logistics",
+          "icon": "🏠"
+        },
+        {
+          "time": "21:00",
+          "title": "Cena: Da Augusto",
+          "description": "Trattoria de la vieja escuela en el corazón del Trastevere. La cuenta se anota a boli en el mantel, solo efectivo. Probad la stracciatella, las alcachofas y algún guiso de carne. Precio medio 15-18 €/persona.",
+          "type": "food",
+          "icon": "🍽️"
+        }
+      ],
+      "places": [
+        {
+          "name": "Museos Vaticanos y Capilla Sixtina",
+          "type": "Museo",
+          "description": "La mayor colección de arte antiguo del mundo, culminando con los frescos de Miguel Ángel en la Capilla Sixtina (1508-1512).",
+          "lat": 41.9065,
+          "lng": 12.4536,
+          "price": "~20 €/persona (con reserva online)",
+          "hours": "08:00–20:00 (última entrada 18:00). Sábado: abierto.",
+          "review": "Reservad con al menos 2-3 semanas de antelación en museivaticani.va. Sin reserva, las colas pueden ser de 2-3 horas en junio.",
+          "verified_at": "2026-05-10",
+          "tips": "El código de vestimenta es obligatorio: hombros y rodillas cubiertos. Llevad agua."
+        },
+        {
+          "name": "Basílica de San Pedro",
+          "type": "Iglesia",
+          "description": "La mayor basílica del mundo y sede del papado. Cúpula de Miguel Ángel, Pietà, altar de Bernini y la tumba de San Pedro bajo el suelo.",
+          "lat": 41.9022,
+          "lng": 12.4539,
+          "price": "Gratis (cúpula: 8-10 €)",
+          "hours": "07:00–19:00",
+          "review": "Llegad por la mañana para encontrar la cola de seguridad más corta. El interior supera cualquier expectativa.",
+          "verified_at": "2026-05-10",
+          "tips": "Hombros y rodillas cubiertos obligatorio. Si coincide con audiencia papal (miércoles), la plaza está cerrada."
+        },
+        {
+          "name": "Castel Sant'Angelo",
+          "type": "Fortaleza / Museo",
+          "description": "Mausoleo de Adriano (139 d.C.) reconvertido en fortaleza papal, prisión y museo. Las vistas desde la terraza son de las mejores de Roma.",
+          "lat": 41.9031,
+          "lng": 12.4663,
+          "price": "15 €",
+          "hours": "09:00–19:30",
+          "review": "El recorrido interno es fascinante: los pasajes secretos que conectaban el castillo con el Vaticano aún son visitables. Contad 1,5 horas.",
+          "verified_at": null,
+          "tips": "Verificar precio actual en situ o en la web oficial."
+        },
+        {
+          "name": "Piazza Navona",
+          "type": "Plaza barroca",
+          "description": "Construida sobre el estadio de Domiciano (siglo I d.C.). Tres fuentes, la central obra maestra de Bernini (1651). Artistas callejeros y terrazas.",
+          "lat": 41.8992,
+          "lng": 12.4731,
+          "price": "Gratis",
+          "hours": "Siempre abierta",
+          "review": "Maravillosa al atardecer. Evitad los restaurantes de la plaza (carísimos); tomad solo un café o gelato.",
+          "verified_at": "2026-05-10",
+          "tips": null
+        }
+      ],
+      "restaurants": [
+        {
+          "name": "Da Augusto",
+          "meal": "cena",
+          "type": "Trattoria vieja escuela",
+          "price_range": "€",
+          "address": "Piazza de' Renzi 15, Trastevere",
+          "speciality": "Guisos de carne, stracciatella, alcachofas",
+          "review": "Solo efectivo. La cuenta se hace a boli en el mantel. Cocina casera y auténtica sin concesiones al turismo. Uno de los sitios más genuinos del Trastevere.",
+          "reservation": "No aceptan reservas",
+          "verified_at": null,
+          "tips": "Llevad efectivo. Probad los platos del día antes que la carta fija."
+        }
+      ],
+      "alternative_plans": {
+        "more_time": "Si la mañana en el Vaticano acaba antes de lo previsto, añadid una visita al Barrio Prati, el elegante barrio del Vaticano: sus bulevares Art Déco y sus pastelerías son una faceta menos conocida de Roma.",
+        "less_time": "Si los Museos Vaticanos agotan las energías, saltaos el Castel Sant'Angelo para esta tarde y reservad la visita para otra mañana. Piazza Navona sí merece el paseo aunque sea breve.",
+        "rainy_day": "El interior de los Museos Vaticanos es perfecto para días de lluvia: podéis pasar 4-5 horas allí sin problema. Si llueve por la tarde, Piazza Navona bajo la lluvia es fotogénicamente perfecta."
+      }
+    },
+    {
+      "day": 3,
+      "date": "Domingo 8 junio 2026",
+      "title": "Domenica al Museo · Todo gratis",
+      "theme": "Panteón + Coliseo + Foro Romano · Entrada libre",
+      "cover_emoji": "🏟️",
+      "timeline": [
+        {
+          "time": "08:00",
+          "title": "Desayuno y salida muy temprana",
+          "description": "Hoy es el Domingo al Museo (primer domingo del mes): Panteón y Coliseo entran gratis, pero las colas son enormes. Salid de casa a las 8:00 como máximo.",
+          "type": "food",
+          "icon": "☕"
+        },
+        {
+          "time": "08:45",
+          "title": "Panteón de Agripa — entrada gratuita",
+          "description": "Llegad antes de las 9:00 (hora de apertura) para ser de las primeras en la cola. El Panteón abre de 9:00 a 19:00 y el primer domingo es gratuito. La cúpula de 43 metros y el óculo que deja caer la luz del cielo son de las experiencias arquitectónicas más poderosas del mundo.",
+          "type": "activity",
+          "icon": "🏛️"
+        },
+        {
+          "time": "10:00",
+          "title": "Fontana di Trevi y centro histórico",
+          "description": "A 10 minutos del Panteón. La tradición de la moneda es medieval: lanzad una moneda de espaldas con la mano derecha para garantizar el regreso. La fuente luce espectacular de mañana, antes de la avalancha turística.",
+          "type": "activity",
+          "icon": "⛲"
+        },
+        {
+          "time": "11:00",
+          "title": "Traslado al Coliseo",
+          "description": "Metro línea B desde Colosseo o taxi. Llegad para las 11:00-11:30 a recoger la entrada gratuita en taquilla (Piazza del Colosseo, junto al Templo de Venus y Roma). Las colas son largas: tened paciencia. Llevaréis agua y protección solar.",
+          "type": "transport",
+          "icon": "🚇"
+        },
+        {
+          "time": "12:00",
+          "title": "Coliseo — entrada gratuita",
+          "description": "El anfiteatro más famoso del mundo, inaugurado en el 80 d.C. por el emperador Tito. Recoged la entrada gratuita en taquilla (se forma cola, llegad pronto). La entrada incluye el primer y segundo anillo y el museo interior. Tiempo recomendado: 75 minutos.",
+          "type": "activity",
+          "icon": "🏟️"
+        },
+        {
+          "time": "13:30",
+          "title": "Foro Romano y Monte Palatino — gratuito",
+          "description": "La misma entrada os da acceso al Foro Romano (corazón político de Roma) y al Monte Palatino (donde vivían los emperadores). Usad las 24 horas de validez de la entrada. Pasad al menos 1,5-2 horas aquí.",
+          "type": "activity",
+          "icon": "🏺"
+        },
+        {
+          "time": "15:30",
+          "title": "Comida en la zona del Aventino",
+          "description": "El barrio del Aventino, justo al sur del Palatino, tiene restaurantes más tranquilos y mejores precios que los alrededores inmediatos del Coliseo. Buscad una trattoria en Via Marmorata.",
+          "type": "food",
+          "icon": "🍽️"
+        },
+        {
+          "time": "17:00",
+          "title": "Circo Máximo y colina del Aventino",
+          "description": "El Circo Máximo (circus maximus), donde se celebraban las carreras de cuadrigas, hoy es un parque verde con vistas al Palatino. Subid al Aventino para ver la famosa cerradura del jardín de los Caballeros de Malta: a través de ella se ven perfectamente alineados la cúpula de San Pedro, los jardines y el horizonte romano.",
+          "type": "activity",
+          "icon": "🌿"
+        },
+        {
+          "time": "19:00",
+          "title": "Regreso al Trastevere y descanso",
+          "description": "El Trastevere está a 20 minutos a pie del Aventino, o tomad el autobús 3. Descansad antes de la última noche.",
+          "type": "logistics",
+          "icon": "🏠"
+        },
+        {
+          "time": "21:00",
+          "title": "Última cena en el Trastevere",
+          "description": "La noche de cierre merece algo especial. Probad Ivo a Trastevere para una pizza romana al horno de leña, fina y crujiente, o Da Enzo al 29 para una carbonara de las que se recuerdan. Acompañad con vino de la casa.",
+          "type": "food",
+          "icon": "🍕"
+        },
+        {
+          "time": "23:00",
+          "title": "Copa de despedida",
+          "description": "Terminar la noche en Piazza Trilussa o en cualquier bar de Via della Scala. El Trastevere nocturno es una de las mejores experiencias de Roma.",
+          "type": "activity",
+          "icon": "🌙"
+        }
+      ],
+      "places": [
+        {
+          "name": "Panteón de Agripa",
+          "type": "Monumento",
+          "description": "El edificio mejor conservado de la Antigua Roma (126 d.C.). Cúpula de 43 m, óculo central y tumbas de Rafael y los reyes de Italia.",
+          "lat": 41.8986,
+          "lng": 12.4769,
+          "price": "GRATIS el primer domingo de mes (normalmente 5 €)",
+          "hours": "09:00–19:00",
+          "review": "Llegad antes de las 9:00 para evitar la cola de gratuidad. En días normales la entrada es 5 €. El impacto visual de la cúpula en el interior supera cualquier foto.",
+          "verified_at": "2026-05-10",
+          "tips": "Código de vestimenta: hombros y rodillas cubiertos (es iglesia activa)."
+        },
+        {
+          "name": "Fontana di Trevi",
+          "type": "Monumento",
+          "description": "La fuente barroca más grande del mundo (1762). Escenario de la famosa escena de La Dolce Vita de Fellini.",
+          "lat": 41.9009,
+          "lng": 12.4833,
+          "price": "Gratis",
+          "hours": "Siempre abierta",
+          "review": "Espectacular a primera hora de la mañana, cuando aún hay poca gente. El agua es de color azul turquesa intenso.",
+          "verified_at": "2026-05-10",
+          "tips": "Evitad la zona a mediodía: decenas de miles de turistas."
+        },
+        {
+          "name": "Coliseo",
+          "type": "Monumento arqueológico",
+          "description": "El anfiteatro romano más grande del mundo (80 d.C.). Capacidad original: más de 50.000 espectadores. Símbolo eterno de Roma.",
+          "lat": 41.8902,
+          "lng": 12.4922,
+          "price": "GRATIS el primer domingo de mes (normalmente 18 €)",
+          "hours": "08:30–19:15 (junio)",
+          "review": "La entrada gratuita se recoge en taquilla. Las colas son largas en el Domenica al Museo pero merece la pena. Llevad agua y crema solar.",
+          "verified_at": "2026-05-10",
+          "tips": "La entrada incluye Foro Romano y Palatino con validez de 24 horas."
+        },
+        {
+          "name": "Foro Romano y Monte Palatino",
+          "type": "Yacimiento arqueológico",
+          "description": "El corazón político y religioso de la Roma antigua. El Palatino fue la colina donde vivían los emperadores y según la tradición, donde Rómulo fundó la ciudad.",
+          "lat": 41.8925,
+          "lng": 12.4853,
+          "price": "Incluido en la entrada del Coliseo",
+          "hours": "09:30–19:15 (junio)",
+          "review": "Más impresionante de lo que parece en fotos. El Arco de Tito (81 d.C.) y el Templo de Saturno son obligatorios. Llevad un mapa o audioguía (5,50 €) para entender qué veis.",
+          "verified_at": "2026-05-10",
+          "tips": "Mucho sol y sin sombra. Salid hacia las 15:30 y visitad por la tarde si podéis."
+        },
+        {
+          "name": "Cerradura de los Caballeros de Malta",
+          "type": "Curiosidad",
+          "description": "A través de la cerradura del jardín de la Orden de Malta en el Aventino se ve perfectamente alineada la cúpula de San Pedro entre los cipreses.",
+          "lat": 41.8830,
+          "lng": 12.4792,
+          "price": "Gratis",
+          "hours": "Siempre accesible (el jardín puede cerrar por la tarde)",
+          "review": "Uno de los secretos mejor guardados de Roma. Generalmente hay cola de gente esperando para mirar, pero es rápido.",
+          "verified_at": null,
+          "tips": "Verificar acceso al jardín exterior in situ."
+        }
+      ],
+      "restaurants": [
+        {
+          "name": "Ivo a Trastevere",
+          "meal": "cena",
+          "type": "Pizzería clásica",
+          "price_range": "€€",
+          "address": "Via di San Francesco a Ripa 158, Trastevere",
+          "speciality": "Pizza romana al horno de leña, fiori di zucca, supplì",
+          "review": "Institución de más de 60 años. La pizza romana es fina, baja y crujiente. El ambiente es genuino y animado. Abre solo por la tarde.",
+          "reservation": "No necesaria generalmente",
+          "verified_at": null,
+          "tips": "Abre solo a partir de las 17:30. Los martes cierra. Comprobad antes de ir."
+        }
+      ],
+      "alternative_plans": {
+        "more_time": "Si el Foro Romano y el Palatino no os cansan, subid al Aventino para visitar también la Basílica de Santa Sabina (siglo V), una de las iglesias paleocristianas mejor conservadas de Roma, con vistas al Tíber.",
+        "less_time": "Si las colas del Coliseo son agotadoras, renunciad al Monte Palatino esta tarde y reservad energía para el Panteón y la Fontana di Trevi. El Foro Romano puede verse brevemente desde el exterior sin entrar.",
+        "rainy_day": "El interior del Coliseo está parcialmente cubierto. En caso de lluvia intensa, prioriza el Panteón (totalmente cubierto) y dejad el Foro para cuando escampe. Los museos capitalinos (también gratuitos el primer domingo) son una alternativa excelente bajo la lluvia."
+      }
+    },
+    {
+      "day": 4,
+      "date": "Lunes 9 junio 2026",
+      "title": "Última mañana romana",
+      "theme": "Mercado, callejeo y vuelta a Valencia",
+      "cover_emoji": "🛫",
+      "timeline": [
+        {
+          "time": "08:00",
+          "title": "Desayuno tranquilo",
+          "description": "Último desayuno romano en la Pasticceria Borghese o cualquier bar del barrio. Capuchino y maritozzo, el dulce romano por excelencia.",
+          "type": "food",
+          "icon": "☕"
+        },
+        {
+          "time": "09:00",
+          "title": "Mercado de Porta Portese (solo si es domingo) / Mercado de Campo de Fiori",
+          "description": "Como hoy es lunes, el Porta Portese (el gran mercadillo del domingo) ya ha terminado. En su lugar, visitad el Mercado de Campo de Fiori, abierto de lunes a sábado por la mañana: flores, fruta, especias y productos locales en una de las plazas más fotogénicas de Roma.",
+          "type": "activity",
+          "icon": "🌸"
+        },
+        {
+          "time": "10:00",
+          "title": "Ghetto Ebraico y Largo Argentina",
+          "description": "El barrio judío romano, uno de los más antiguos del mundo, está a diez minutos del Trastevere. El Largo di Torre Argentina es el yacimiento arqueológico donde fue asesinado Julio César en el 44 a.C. —hoy también alberga una colonia de gatos callejeros—.",
+          "type": "activity",
+          "icon": "🐱"
+        },
+        {
+          "time": "11:00",
+          "title": "Recogida de maletas y check-out",
+          "description": "Regresad al Airbnb para recoger el equipaje. Si el anfitrión lo permite, dejad las maletas y continuad hasta las 12:00.",
+          "type": "logistics",
+          "icon": "🧳"
+        },
+        {
+          "time": "11:30",
+          "title": "Traslado al aeropuerto Fiumicino",
+          "description": "Tren regional FL1 desde Roma Trastevere hasta el aeropuerto Fiumicino (8 €, ~40 min). Con vuelo a las 12:35, salid del alojamiento como máximo a las 10:45 para tener margen. El aeropuerto recomienda llegar 2 horas antes.",
+          "type": "transport",
+          "icon": "🚂"
+        },
+        {
+          "time": "12:35",
+          "title": "Salida hacia Valencia (VLC)",
+          "description": "Vuelo Roma FCO → Valencia. Llegada prevista a las 14:45. ¡Arrivederci, Roma!",
+          "type": "transport",
+          "icon": "✈️"
+        }
+      ],
+      "places": [
+        {
+          "name": "Mercado de Campo de Fiori",
+          "type": "Mercado",
+          "description": "Mercado matutino de frutas, verduras, especias y flores en la plaza donde Giordano Bruno fue quemado en 1600. Abierto lunes-sábado.",
+          "lat": 41.8955,
+          "lng": 12.4722,
+          "price": "Gratis (compras aparte)",
+          "hours": "07:00–14:00",
+          "review": "Uno de los mercados más pintorescos de Roma. Los lunes suele tener menos turistas. Probad algún producto local de temporada.",
+          "verified_at": null,
+          "tips": "Comprad algo para picar en el vuelo: quesos, embutidos o fruta de temporada."
+        },
+        {
+          "name": "Largo di Torre Argentina",
+          "type": "Yacimiento arqueológico",
+          "description": "Cuatro templos republicanos (siglos IV-II a.C.) y el lugar donde fue asesinado Julio César. También hogar de la famosa colonia de gatos de Roma.",
+          "lat": 41.8960,
+          "lng": 12.4757,
+          "price": "Gratis (exterior) / 5 € (interior)",
+          "hours": "09:30–19:30",
+          "review": "El yacimiento puede verse perfectamente desde el borde sin pagar. Los gatos son la atracción secundaria más famosa de Roma.",
+          "verified_at": null,
+          "tips": "Verificar precio de entrada interior in situ."
+        }
+      ],
+      "restaurants": [
+        {
+          "name": "Bar del Fico o similar en Campo de Fiori",
+          "meal": "almuerzo rápido",
+          "type": "Bar / Café",
+          "price_range": "€",
+          "address": "Zona Campo de Fiori, Roma",
+          "speciality": "Bocadillos, pizza al taglio, coffee",
+          "review": "Para el último día lo ideal es algo ligero antes del vuelo. Evitad comer demasiado.",
+          "reservation": "No necesaria",
+          "verified_at": null,
+          "tips": "Comprad un panino o pizza al taglio para llevar."
+        }
+      ],
+      "alternative_plans": {
+        "more_time": "Si el check-out es temprano y os sobra tiempo, el Palazzo Altemps (Museos Nacionales Romanos) está a cinco minutos de Piazza Navona y tiene una colección de escultura antigua extraordinaria con muy poca gente.",
+        "less_time": "Si hay que salir rápido, saltaos el callejeo y id directamente al aeropuerto con margen. El FL1 desde Roma Trastevere a Fiumicino es la opción más directa y puntual."
+      }
+    }
+  ],
+  "practical_tips": [
+    {
+      "title": "🚌 Transporte",
+      "items": [
+        {
+          "subtitle": "Aeropuerto → Trastevere",
+          "text": "Tren regional FL1 (8 €, ~40 min) desde Fiumicino hasta la estación Roma Trastevere. Es la opción más directa y económica para vuestro alojamiento. Validar el billete físico antes de subir en la máquina verde/amarilla del andén. Taxi oficial: tarifa fija 55 € para el centro."
+        },
+        {
+          "subtitle": "Transporte urbano",
+          "text": "El billete sencillo cuesta 1,50 € y es válido 100 minutos en metro, autobús y tranvía. El bono de 24 h cuesta 7 €. El Trastevere tiene buena conexión con el centro: autobús 8, 23, H y tranvía 8."
+        },
+        {
+          "subtitle": "A pie es la mejor opción",
+          "text": "Roma centro es compacta y caminable. Del Trastevere al Panteón son 25 minutos a pie; al Coliseo, 35 minutos. Llevad calzado muy cómodo —los adoquines romanos son implacables—."
+        }
+      ]
+    },
+    {
+      "title": "💰 Trucos de ahorro",
+      "items": [
+        {
+          "subtitle": "Domenica al Museo",
+          "text": "El primer domingo de cada mes todos los museos estatales italianos son gratuitos: Coliseo, Foro Romano, Palatino, Panteón y muchos más. El 8 de junio podéis ahorrar más de 23 € por persona solo en el Coliseo y el Panteón."
+        },
+        {
+          "subtitle": "Fuentes de agua gratuita",
+          "text": "Roma tiene más de 2.500 fuentes públicas llamadas «nasoni» (narices) con agua potable fría y deliciosa. Llevad una botella reutilizable y rellenadla en cualquier fuente: ahorraréis 3-5 € diarios en botellas."
+        },
+        {
+          "subtitle": "Desayuno en bar de barrio",
+          "text": "Capuchino + cornetto en barra: 2,50-3 €. En terraza: el doble. Los italianos desayunan de pie en barra y tienen razón."
+        },
+        {
+          "subtitle": "Menú del mediodía",
+          "text": "Los restaurantes del Trastevere suelen tener menú del día entre 12 y 15 €: primer plato, segundo, bebida y postre. Mucho más económico que cenar con carta completa."
+        }
+      ]
+    },
+    {
+      "title": "🏛️ Cultura local",
+      "items": [
+        {
+          "subtitle": "El ritmo romano",
+          "text": "Los romanos cenan tarde: las trattorias se llenan a partir de las 20:30. Si entráis a las 19:30 estaréis solos (y el personal puede estar poco animado). Respetad el ritmo local."
+        },
+        {
+          "subtitle": "Coperto y servicio",
+          "text": "En muchos restaurantes se cobra «coperto» (cubierto): 1,50-3 € por persona. No es una estafa, es costumbre. El servicio (propina) es opcional pero se agradece redondear la cuenta."
+        },
+        {
+          "subtitle": "El Trastevere es el barrio más auténtico",
+          "text": "Evitad los restaurantes con foto-menú en la puerta y camareros que os llaman desde la calle. Buscad los que están llenos de locales."
+        }
+      ]
+    },
+    {
+      "title": "🍝 Gastronomía",
+      "items": [
+        {
+          "subtitle": "Los cuatro clásicos de la pasta romana",
+          "text": "Cacio e pepe (queso y pimienta), Carbonara (guanciale, huevo y pecorino, jamás con nata), Amatriciana (tomate, guanciale y pecorino) y Gricia (guanciale y pecorino, sin tomate). Si alguna lleva nata, salid corriendo."
+        },
+        {
+          "subtitle": "Supplì y trapizzino",
+          "text": "El supplì es la croqueta romana: arroz frito con ragù y mozzarella fundida. El trapizzino es la invención más reciente: masa de pizza enrollada con rellenos varios. Ambos son imprescindibles como street food."
+        },
+        {
+          "subtitle": "Gelato auténtico",
+          "text": "El gelato artesanal (artigianale) se reconoce porque no tiene colores flúor y los sabores están guardados en recipientes con tapa. Si el helado está en montañas de colores brillantes, es industrial."
+        },
+        {
+          "subtitle": "Café romano",
+          "text": "El espresso en Roma es más corto y concentrado que en España. El capuchino se toma solo en el desayuno; pedirlo por la tarde es de turista. El caffè macchiato (manchado de leche) es una buena alternativa."
+        }
+      ]
+    },
+    {
+      "title": "🛡️ Seguridad y salud",
+      "items": [
+        {
+          "subtitle": "Carteristas",
+          "text": "Vigilad las pertenencias en el metro (especialmente línea A), en las zonas de alta afluencia turística (Coliseo, Fontana di Trevi, Vaticano) y en el transporte público. Usad riñonera o bolso cruzado con cierre."
+        },
+        {
+          "subtitle": "Calor de junio",
+          "text": "Junio en Roma puede superar los 30 °C. Protección solar 50+, gorra, gafas de sol y botella de agua son imprescindibles. Planificad las visitas al aire libre por la mañana temprano o a última hora de la tarde."
+        },
+        {
+          "subtitle": "Emergencias en Italia",
+          "text": "Emergencias: 112 (número europeo único). Policía: 113. Bomberos: 115. Ambulancia: 118. Hospital más cercano al Trastevere: Ospedale San Camillo-Forlanini. La Tarjeta Sanitaria Europea (TSE) cubre la asistencia básica."
+        },
+        {
+          "subtitle": "Taxistas ilegales",
+          "text": "En el aeropuerto ignorad a cualquier persona que os ofrezca taxi dentro del terminal. Los taxis oficiales son blancos con taxímetro y tienen tarifa fija de 55 € desde Fiumicino al centro."
+        }
+      ]
+    },
+    {
+      "title": "🎒 Qué llevar",
+      "items": [
+        {
+          "subtitle": "Calzado cómodo es lo más importante",
+          "text": "Roma tiene más de 4.000 años de adoquines. Los tacones y las sandalias de moda destruirán vuestros pies antes del mediodía. Zapatillas deportivas cómodas o sandalias con suela gruesa son imprescindibles."
+        },
+        {
+          "subtitle": "Ropa para templos y museos",
+          "text": "Hombros y rodillas cubiertos son obligatorios en el Vaticano, el Panteón y muchas iglesias. Llevad un pañuelo o camiseta fina en el bolso para cubriros a la entrada."
+        },
+        {
+          "subtitle": "Adaptador tipo L",
+          "text": "Italia usa tres tipos de enchufe: C (compatible con España), F (Schuko, compatible) y L (tres clavijas en línea, exclusivo de Italia y Chile). Los Airbnb suelen tener mezcla de los tres. Un adaptador tipo L os evitará sorpresas."
+        }
+      ]
+    },
+    {
+      "title": "☀️ Clima y ropa",
+      "items": [
+        {
+          "subtitle": "Junio en Roma",
+          "text": "Temperaturas entre 18°C (noche) y 28-30°C (mediodía). Ropa ligera de verano para el día: camisetas, vestidos, shorts. Para la noche algo de manga larga puede ser útil. Probabilidad de lluvia baja (~9% días)."
+        },
+        {
+          "subtitle": "Sol intenso",
+          "text": "Las horas de sol en junio son casi 10 al día. La luz del amanecer y el atardecer son espectaculares para fotografiar monumentos. El mediodía entre las 13:00 y las 16:00 conviene pasarlo bajo techado o en restaurantes."
+        }
+      ]
+    },
+    {
+      "title": "📸 Fotografía y momentos",
+      "items": [
+        {
+          "subtitle": "Las mejores horas para fotografiar",
+          "text": "La hora dorada (golden hour) es de 6:30 a 7:30 y de 19:30 a 20:30 en junio. El Coliseo, el Panteón y la Fontana di Trevi a esas horas, sin multitudes, son imágenes imposibles de conseguir al mediodía."
+        },
+        {
+          "subtitle": "Mirador del Gianicolo",
+          "text": "La colina del Gianicolo, a 15 minutos a pie del Trastevere hacia arriba, ofrece la mejor panorámica de Roma: la cúpula de San Pedro, el Quirinale, el Vittoriano. Perfecta para el atardecer."
+        }
+      ]
+    }
+  ],
+  "apps_recommended": [
+    {
+      "name": "Trenitalia",
+      "platform": "iOS / Android",
+      "use": "Comprar billetes del tren regional FL1 al aeropuerto y validarlos en el móvil.",
+      "free": true,
+      "url": "https://www.trenitalia.com"
+    },
+    {
+      "name": "Google Maps",
+      "platform": "iOS / Android",
+      "use": "Navegación peatonal por Roma. Descargad el mapa offline antes de salir.",
+      "free": true,
+      "url": "https://maps.google.com"
+    },
+    {
+      "name": "Moovit",
+      "platform": "iOS / Android",
+      "use": "Transporte público romano en tiempo real: buses, tranvías, metro. Más fiable que Google Maps para rutas urbanas italianas.",
+      "free": true,
+      "url": "https://moovit.com"
+    },
+    {
+      "name": "museivaticani.va",
+      "platform": "Web",
+      "use": "Reservar entradas oficiales a los Museos Vaticanos. Hacedlo con 2-3 semanas de antelación.",
+      "free": false,
+      "url": "https://www.museivaticani.va"
+    },
+    {
+      "name": "colosseo.it",
+      "platform": "Web",
+      "use": "Web oficial del Parco Archeologico del Colosseo para entradas en días normales.",
+      "free": false,
+      "url": "https://colosseo.it"
+    },
+    {
+      "name": "XE Currency",
+      "platform": "iOS / Android",
+      "use": "Convertidor de divisas en tiempo real para controlar el gasto.",
+      "free": true,
+      "url": "https://www.xe.com"
+    },
+    {
+      "name": "TheFork (ElTenedor)",
+      "platform": "iOS / Android",
+      "use": "Reservas de restaurante en Roma con descuentos frecuentes del 20-50%.",
+      "free": true,
+      "url": "https://www.thefork.es"
+    }
+  ],
+  "packing_list": {
+    "summer_clothing": [
+      "Camisetas manga corta (4-5)",
+      "Vestidos o blusas ligeras",
+      "Pantalón corto o falda",
+      "Camiseta fina de manga larga (para templos y noches)",
+      "Ropa interior y calcetines"
+    ],
+    "footwear": [
+      "Zapatillas deportivas muy cómodas (imprescindible)",
+      "Sandalia con suela gruesa",
+      "Chancla para el alojamiento"
+    ],
+    "accessories": [
+      "Gorra o sombrero",
+      "Gafas de sol",
+      "Bolso cruzado con cierre (anticarteristas)",
+      "Pañuelo o chal ligero (para templos)"
+    ],
+    "items": [
+      "Móvil y cargador",
+      "Batería externa",
+      "Adaptador tipo L (Italia)",
+      "Auriculares",
+      "Botella de agua reutilizable",
+      "Paraguas compacto"
+    ],
+    "documents": [
+      "DNI (válido para Italia como país UE)",
+      "Tarjeta de crédito / débito",
+      "Tarjeta Sanitaria Europea (TSE)",
+      "Billetes de vuelo (digital o impreso)",
+      "Reserva del Airbnb",
+      "Reserva Museos Vaticanos"
+    ],
+    "toiletries": [
+      "Crema solar SPF 50+",
+      "Aftersun",
+      "Desodorante",
+      "Gel y champú",
+      "Cepillo y pasta de dientes",
+      "Maquillaje esencial",
+      "Pañuelos de papel"
+    ],
+    "health": [
+      "Analgésico (ibuprofeno / paracetamol)",
+      "Antihistamínico",
+      "Tiritas y desinfectante",
+      "Protector gástrico"
+    ]
+  },
+  "emergency_contacts": [
+    { "name": "Emergencias Europa (112)", "phone": "112", "note": "Policía, ambulancia, bomberos" },
+    { "name": "Policía Italia (113)", "phone": "113", "note": "Policía nacional italiana" },
+    { "name": "Ambulancia Italia (118)", "phone": "118", "note": "Urgencias médicas" },
+    { "name": "Embajada España en Roma", "phone": "+39 06 684 0401", "note": "Calle del Quirinale 4, Roma" },
+    { "name": "Consulado España en Roma", "phone": "+39 06 4204 0454", "note": "Via Campo Marzio 34, Roma" }
+  ]
+}
+
+</script>
+
+<!-- =========================================================
+     LÓGICA
+     ========================================================= -->
+<script>
+(function () {
+  'use strict';
+
+  // ------------------------------------------------------
+  // 1. CARGA DE DATOS Y STORAGE
+  // ------------------------------------------------------
+  const DATA = JSON.parse(document.getElementById('guide-data').textContent);
+  const SLUG = (DATA.meta?.destination?.name || 'guia').toLowerCase().replace(/\s+/g, '-');
+  const STORE_KEY = 'guia_' + SLUG + '_v1';
+
+  const defaultStore = {
+    checklist: {},       // { "day1_tl3": true, ... }
+    notes: {},           // { "day1": "texto", ... }
+    expenses: [],        // [{ id, day, category, desc, amount, date }]
+    packing: {},         // { "clothing_0": true, ... }
+    packing_custom: null,// items añadidos/editados por el usuario (override de DATA.packing_list)
+    budget_edit: null,   // { breakdown } editado por el usuario
+    split: null,         // { people: [], expenses: [] } gastos compartidos
+    theme: null          // "light" | "dark" | null (= auto)
+  };
+
+  function loadStore() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return { ...defaultStore };
+      return { ...defaultStore, ...JSON.parse(raw) };
+    } catch (e) { return { ...defaultStore }; }
+  }
+  function saveStore() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) {}
+  }
+
+  const store = loadStore();
+
+  // ------------------------------------------------------
+  // 2. UTILIDADES
+  // ------------------------------------------------------
+  const fmtDate = (isoDate, opts = { day: 'numeric', month: 'short' }) => {
+    const d = new Date(isoDate + 'T00:00:00');
+    return d.toLocaleDateString('es-ES', opts);
+  };
+  const fmtMoney = (n, currency = 'EUR') => {
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency, maximumFractionDigits: 0 }).format(n);
+  };
+  const el = (sel) => document.querySelector(sel);
+  const esc = (s) => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  const todayISO = () => new Date().toISOString().slice(0, 10);
+
+  function getCurrentTripDay() {
+    const today = todayISO();
+    const d = DATA.days.find(d => d.date === today);
+    return d || null;
+  }
+
+  // ------------------------------------------------------
+  // 3. TEMA (modo oscuro)
+  // ------------------------------------------------------
+  function applyTheme() {
+    let t = store.theme;
+    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = t;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = t === 'dark' ? '#14110E' : (DATA.meta?.theme_color || '#C65D3A');
+  }
+  el('#btn-theme').addEventListener('click', () => {
+    const current = document.documentElement.dataset.theme;
+    store.theme = current === 'dark' ? 'light' : 'dark';
+    saveStore();
+    applyTheme();
+  });
+  applyTheme();
+
+  // Tema dinámico desde el JSON
+  if (DATA.meta?.theme_color) {
+    document.documentElement.style.setProperty('--accent', DATA.meta.theme_color);
+  }
+
+  // ------------------------------------------------------
+  // 4. RENDERS POR PÁGINA
+  // ------------------------------------------------------
+
+  // --- HOME -----------------------------------------------
+  function renderHome() {
+    const meta = DATA.meta;
+    const intro = DATA.intro;
+    const tripDay = getCurrentTripDay();
+
+    let todayHTML = '';
+    if (tripDay) {
+      todayHTML = `
+        <button class="today-card" onclick="window.__nav.goDay(${tripDay.day})">
+          <div class="today-card__label">Hoy — Día ${tripDay.day}</div>
+          <div class="today-card__title">${esc(tripDay.title)}</div>
+          <p class="today-card__summary">${esc(DATA.summary.find(s => s.day === tripDay.day)?.summary || '')}</p>
+          <span class="today-card__link">Ver itinerario →</span>
+        </button>`;
+    }
+
+    const valueProps = (intro.value_props || []).map(v => `
+      <div class="prop-card">
+        <div class="prop-card__icon">${esc(v.icon)}</div>
+        <div>
+          <div class="prop-card__title">${esc(v.title)}</div>
+          <div class="prop-card__text">${esc(v.text)}</div>
+        </div>
+      </div>`).join('');
+
+    const historyHTML = DATA.history ? `
+      <h2 class="section-title">${esc(DATA.history.title || 'Contexto histórico')}</h2>
+      <div class="history" id="history-block">
+        <p class="history__summary">${esc(DATA.history.summary || '')}</p>
+        <button class="history__toggle" onclick="document.getElementById('history-block').classList.toggle('is-open')">
+          Ampliar <span class="chev">▾</span>
+        </button>
+        <div class="history__detail">
+          ${(DATA.history.periods || []).map(p => `
+            <div class="history__period">
+              ${p.range ? `<div class="history__period-range">${esc(p.range)}</div>` : ''}
+              <div class="history__period-title">${esc(p.title)}</div>
+              <p class="history__period-text">${esc(p.text)}</p>
+            </div>`).join('')}
+        </div>
+      </div>` : '';
+
+    el('#page-home').innerHTML = `
+      <section class="hero ${meta.cover_image ? 'hero--with-image' : ''}">
+        ${meta.cover_image ? `<div class="hero__bg" style="background-image: url('${esc(meta.cover_image)}')"></div>` : ''}
+        <div class="hero__eyebrow">Guía ${esc(meta.destination.country)}</div>
+        <h1 class="hero__title">${esc(meta.title)}</h1>
+        ${meta.subtitle ? `<div class="hero__subtitle">${esc(meta.subtitle)}</div>` : ''}
+        <div class="hero__meta">
+          <span class="hero__meta-item">📅 ${fmtDate(meta.dates.start)} – ${fmtDate(meta.dates.end, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+          <span class="hero__meta-item">🧭 ${meta.dates.days} días</span>
+          <span class="hero__meta-item">👥 ${meta.travelers.adults}${meta.travelers.children ? ' + ' + meta.travelers.children + ' 👶' : ''}</span>
+        </div>
+      </section>
+
+      ${todayHTML}
+
+      <h2 class="section-title">Qué ofrece el viaje</h2>
+      <div class="props-grid">${valueProps}</div>
+
+      ${historyHTML}
+    `;
+
+    el('#header-title').textContent = meta.title;
+  }
+
+  // --- DAYS LIST ------------------------------------------
+  function dayProgress(day) {
+    const items = day.timeline || [];
+    if (!items.length) return 0;
+    const done = items.filter((_, idx) => store.checklist[`d${day.day}_t${idx}`]).length;
+    return Math.round((done / items.length) * 100);
+  }
+
+  function renderDaysList() {
+    const daysHTML = DATA.days.map(d => {
+      const sum = DATA.summary.find(s => s.day === d.day)?.summary || '';
+      const prog = dayProgress(d);
+      return `
+        <button class="day-card" onclick="window.__nav.goDay(${d.day})">
+          <div class="day-card__num">
+            <span class="day-card__num-label">Día</span>
+            <span class="day-card__num-value">${d.day}</span>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div class="day-card__date">${fmtDate(d.date, { weekday: 'short', day: 'numeric', month: 'short' })}</div>
+            <div class="day-card__title">${esc(d.title)}</div>
+            <div class="day-card__summary">${esc(sum)}</div>
+            <div class="day-card__progress">
+              <span>${prog}%</span>
+              <div class="progress-bar"><div class="progress-bar__fill" style="width:${prog}%"></div></div>
+            </div>
+          </div>
+        </button>`;
+    }).join('');
+
+    el('#page-days').innerHTML = `
+      <h2 class="section-title" style="margin-top:0">Itinerario día a día</h2>
+      <div class="days-list">${daysHTML}</div>
+    `;
+  }
+
+  // --- DAY DETAIL -----------------------------------------
+  function renderDay(dayNum) {
+    const d = DATA.days.find(x => x.day === dayNum);
+    if (!d) { el('#page-day').innerHTML = '<p>Día no encontrado.</p>'; return; }
+
+    const timelineHTML = (d.timeline || []).map((t, idx) => {
+      const key = `d${d.day}_t${idx}`;
+      const done = !!store.checklist[key];
+      const place = t.place_id ? (d.places || []).find(p => p.id === t.place_id) : null;
+      return `
+        <div class="tl-item ${done ? 'is-done' : ''}" data-icon="${esc(t.icon || '•')}" data-key="${key}">
+          <div class="tl-item__head">
+            <span class="tl-item__time">${esc(t.time)}</span>
+            <button class="tl-item__check" onclick="window.__actions.toggleChecklist('${key}')"></button>
+          </div>
+          <div class="tl-item__title">${esc(t.title)}</div>
+          <div class="tl-item__description">${esc(t.description)}</div>
+          ${place ? `<div class="tl-item__place">📍 ${esc(place.name)}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    const placesHTML = (d.places || []).map(p => {
+      const gmaps = p.gmaps_url || `https://www.google.com/maps/search/?api=1&query=${p.coords.lat},${p.coords.lng}`;
+      const waze = `https://waze.com/ul?ll=${p.coords.lat},${p.coords.lng}&navigate=yes`;
+      const waShare = `https://wa.me/?text=${encodeURIComponent(p.name + ' — ' + gmaps)}`;
+      return `
+        <div class="place-card" id="place-${esc(p.id)}">
+          <div class="place-card__name">📍 ${esc(p.name)}</div>
+          ${p.review ? `<p class="place-card__review">${esc(p.review)}</p>` : ''}
+          <div class="place-card__meta">
+            ${p.hours ? `<div class="place-card__meta-item"><span class="place-card__meta-label">🕐</span> ${esc(p.hours)}</div>` : ''}
+            ${p.price ? `<div class="place-card__meta-item"><span class="place-card__meta-label">💶</span> ${esc(p.price)}</div>` : ''}
+            ${p.tips ? `<div class="place-card__meta-item"><span class="place-card__meta-label">💡</span> ${esc(p.tips)}</div>` : ''}
+          </div>
+          <div class="place-card__actions">
+            <a class="btn btn--primary btn--sm" href="${gmaps}" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+              Google Maps
+            </a>
+            <a class="btn btn--ghost btn--sm" href="${waze}" target="_blank" rel="noopener">Waze</a>
+            <a class="btn btn--ghost btn--sm" href="${waShare}" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5-.2 0-.4 0-.6 0-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.1 3 .1.2 2 3.1 4.9 4.3 2.9 1.2 2.9.8 3.4.8.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.2-.2-.5-.3zM12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>`;
+    }).join('');
+
+    const restaurantsHTML = (d.restaurants || []).length ? `
+      <h3 class="section-title section-title--small">🍽 Dónde comer</h3>
+      <div class="restaurants">
+        ${(d.restaurants || []).map(r => `
+          <div class="rest-card">
+            <div class="rest-card__head">
+              <span class="rest-card__name">${esc(r.name)}</span>
+              ${r.price_range ? `<span class="rest-card__price">${esc(r.price_range)}</span>` : ''}
+            </div>
+            ${r.speciality ? `<div class="rest-card__spec">${esc(r.speciality)}</div>` : ''}
+            ${r.meal ? `<span class="rest-card__meal">${esc(r.meal)}${r.reservation_required ? ' · reserva' : ''}</span>` : ''}
+          </div>`).join('')}
+      </div>` : '';
+
+    const alt = d.alternative_plans || {};
+    const altHTML = (alt.more_time || alt.less_time || alt.rainy_day || alt.with_kids) ? `
+      <h3 class="section-title section-title--small">🔀 Planes alternativos</h3>
+      <div class="alt-plans">
+        ${alt.more_time ? `<div class="alt-plan"><div class="alt-plan__label">Si tienes más tiempo</div><div class="alt-plan__text">${esc(alt.more_time)}</div></div>` : ''}
+        ${alt.less_time ? `<div class="alt-plan"><div class="alt-plan__label">Si tienes menos tiempo</div><div class="alt-plan__text">${esc(alt.less_time)}</div></div>` : ''}
+        ${alt.rainy_day ? `<div class="alt-plan"><div class="alt-plan__label">Si llueve</div><div class="alt-plan__text">${esc(alt.rainy_day)}</div></div>` : ''}
+        ${alt.with_kids ? `<div class="alt-plan"><div class="alt-plan__label">Con niños</div><div class="alt-plan__text">${esc(alt.with_kids)}</div></div>` : ''}
+      </div>` : '';
+
+    const info = d.info || {};
+    const infoHTML = [
+      info.travel_tips ? { t: '💡 Consejos', items: info.travel_tips } : null,
+      info.access ? { t: '🎟 Acceso', items: info.access } : null,
+      info.facts ? { t: '📊 Datos de interés', items: info.facts } : null
+    ].filter(Boolean).map(b => `
+      <div class="info-block">
+        <div class="info-block__title">${esc(b.t)}</div>
+        <ul class="info-block__list">${b.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+      </div>`).join('');
+
+    const log = d.logistics || {};
+    const logisticsHTML = (log.driving_km || log.walking_km || log.public_transport) ? `
+      <div class="day-detail__logistics">
+        ${log.driving_km ? `<span class="day-detail__logistics-item">🚗 ${log.driving_km} km · ${Math.round((log.driving_time_min||0)/60*10)/10}h</span>` : ''}
+        ${log.walking_km ? `<span class="day-detail__logistics-item">🚶 ${log.walking_km} km · ${Math.round((log.walking_time_min||0)/60*10)/10}h</span>` : ''}
+        ${log.public_transport ? `<span class="day-detail__logistics-item">🚌 ${esc(log.public_transport)}</span>` : ''}
+      </div>` : '';
+
+    const noteKey = `d${d.day}`;
+    const noteVal = store.notes[noteKey] || '';
+
+    el('#page-day').innerHTML = `
+      <div class="day-detail__head">
+        <button class="back-btn" onclick="window.__nav.go('days')">← Volver al itinerario</button>
+        <div class="day-detail__eyebrow">Día ${d.day} — ${fmtDate(d.date, { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+        <h1 class="day-detail__title">${esc(d.title)}</h1>
+        ${logisticsHTML}
+      </div>
+
+      <div class="timeline">${timelineHTML}</div>
+
+      ${placesHTML ? `<h3 class="section-title section-title--small">🏛 Lugares del día</h3>${placesHTML}` : ''}
+
+      ${restaurantsHTML}
+      ${altHTML}
+      ${infoHTML}
+
+      <div class="day-notes">
+        <div class="day-notes__label">📝 Tus notas del día</div>
+        <textarea class="day-notes__textarea" id="note-input" placeholder="Impresiones, fotos tomadas, gastos del día…">${esc(noteVal)}</textarea>
+      </div>
+
+      <div class="day-nav">
+        ${d.day > 1 ? `<button class="day-nav__btn day-nav__btn--prev" onclick="window.__nav.goDay(${d.day - 1})">← Día ${d.day - 1}</button>` : '<div></div>'}
+        ${d.day < DATA.days.length ? `<button class="day-nav__btn day-nav__btn--next" onclick="window.__nav.goDay(${d.day + 1})">Día ${d.day + 1} →</button>` : '<div></div>'}
+      </div>
+    `;
+
+    el('#note-input').addEventListener('input', (e) => {
+      store.notes[noteKey] = e.target.value;
+      saveStore();
+    });
+
+    el('#header-title').textContent = `Día ${d.day} · ${d.title}`;
+  }
+
+  // --- MAP ------------------------------------------------
+  let mapInstance = null;
+  let mapLoadAttempts = 0;
+  function renderMap() {
+    if (!window.L) {
+      mapLoadAttempts++;
+      if (mapLoadAttempts > 20) {  // ~4 segundos
+        el('#map').innerHTML = `<div class="empty-state" style="padding:40px 20px">
+          🗺️ <br><br>
+          <strong>Mapa no disponible</strong><br>
+          <span style="font-size:13px">Este archivo necesita conexión para cargar los mapas.<br>Los datos del itinerario siguen disponibles en las otras pestañas.</span>
+        </div>`;
+        return;
+      }
+      setTimeout(renderMap, 200);
+      return;
+    }
+    const om = DATA.overview_map;
+    if (!om) { el('#map').innerHTML = '<p style="padding:20px">Sin datos de mapa.</p>'; return; }
+
+    try {
+      if (mapInstance) { mapInstance.remove(); mapInstance = null; }
+
+      mapInstance = L.map('map', { zoomControl: true, attributionControl: true })
+        .setView([om.center.lat, om.center.lng], om.zoom || 8);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+      }).addTo(mapInstance);
+
+      const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+
+      (om.markers || []).forEach(m => {
+        const icon = L.divIcon({
+          className: 'custom-marker',
+          html: `<div style="width:30px;height:30px;background:${accent};color:#fff;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid #fff">${m.day}</div>`,
+          iconSize: [30, 30],
+          iconAnchor: [15, 15]
+        });
+        L.marker([m.coords.lat, m.coords.lng], { icon })
+          .addTo(mapInstance)
+          .bindPopup(`<strong>${esc(m.name)}</strong><br><small>Día ${m.day}</small><br><a href="#" onclick="window.__nav.goDay(${m.day});return false;">Ver día →</a>`);
+      });
+    } catch (err) {
+      console.error('Error al inicializar el mapa:', err);
+      el('#map').innerHTML = `<div class="empty-state" style="padding:40px 20px">
+        ⚠️ Error al cargar el mapa.<br>
+        <small>${esc(err.message || 'Desconocido')}</small>
+      </div>`;
+    }
+  }
+
+  // --- TIPS -----------------------------------------------
+  function renderTips() {
+    // Separar los tips normales de los que son de apps (para fusionarlos con apps_recommended)
+    const appKeywords = ['app', 'apps', 'aplicacion', 'aplicaciones'];
+    const isAppGroup = (g) => appKeywords.some(kw => g.title.toLowerCase().includes(kw));
+
+    const normalTips = (DATA.practical_tips || []).filter(g => !isAppGroup(g));
+    const appTipGroups = (DATA.practical_tips || []).filter(g => isAppGroup(g));
+
+    // Fusionar items de apps de practical_tips + apps_recommended en un solo grupo
+    const appItems = [];
+    appTipGroups.forEach(g => {
+      (g.items || []).forEach(i => appItems.push(i));
+    });
+    // Añadir apps_recommended como items adicionales (evitando duplicados por nombre)
+    const existingNames = new Set(appItems.map(i => i.subtitle.toLowerCase()));
+    (DATA.apps_recommended || []).forEach(a => {
+      if (!existingNames.has(a.name.toLowerCase())) {
+        appItems.push({ subtitle: a.name, text: a.purpose });
+      }
+    });
+
+    let tipIdx = 0;
+
+    const normalHTML = normalTips.map(g => {
+      const id = tipIdx++;
+      return `
+      <div class="tip-group" id="tip-group-${id}">
+        <button class="tip-group__head" onclick="document.getElementById('tip-group-${id}').classList.toggle('is-open')">
+          <div class="tip-group__head-left">
+            <span class="tip-group__icon">${esc(g.icon)}</span>
+            <span class="tip-group__title">${esc(g.title)}</span>
+          </div>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-group__body">
+          ${(g.items || []).map(i => `
+            <div class="tip-item">
+              <div class="tip-item__subtitle">${esc(i.subtitle)}</div>
+              <div class="tip-item__text">${esc(i.text)}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+
+    // Emergencias como grupo desplegable
+    const em = DATA.emergency || {};
+    const emergencyItems = [
+      em.local_emergency ? { subtitle: 'Emergencias general', text: em.local_emergency } : null,
+      em.medical ? { subtitle: 'Médico / ambulancias', text: em.medical } : null,
+      em.police ? { subtitle: 'Policía', text: em.police } : null,
+      em.embassy ? { subtitle: 'Embajada / consulado', text: em.embassy } : null,
+      em.insurance_reminder ? { subtitle: 'Seguro de viaje', text: em.insurance_reminder } : null
+    ].filter(Boolean);
+
+    let emergencyHTML = '';
+    if (emergencyItems.length > 0) {
+      const emId = tipIdx++;
+      emergencyHTML = `
+      <div class="tip-group" id="tip-group-${emId}">
+        <button class="tip-group__head" onclick="document.getElementById('tip-group-${emId}').classList.toggle('is-open')">
+          <div class="tip-group__head-left">
+            <span class="tip-group__icon">🆘</span>
+            <span class="tip-group__title">Emergencias</span>
+          </div>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-group__body">
+          ${emergencyItems.map(i => `
+            <div class="tip-item">
+              <div class="tip-item__subtitle">${esc(i.subtitle)}</div>
+              <div class="tip-item__text">${esc(i.text)}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    // Apps unificadas como grupo desplegable
+    let appsHTML = '';
+    if (appItems.length > 0) {
+      const appsId = tipIdx++;
+      appsHTML = `
+      <div class="tip-group" id="tip-group-${appsId}">
+        <button class="tip-group__head" onclick="document.getElementById('tip-group-${appsId}').classList.toggle('is-open')">
+          <div class="tip-group__head-left">
+            <span class="tip-group__icon">📱</span>
+            <span class="tip-group__title">Apps recomendadas</span>
+          </div>
+          <span class="chev">▾</span>
+        </button>
+        <div class="tip-group__body">
+          ${appItems.map(i => `
+            <div class="tip-item">
+              <div class="tip-item__subtitle">${esc(i.subtitle)}</div>
+              <div class="tip-item__text">${esc(i.text)}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    el('#page-tips').innerHTML = `
+      <h2 class="section-title" style="margin-top:0">Consejos prácticos</h2>
+      ${normalHTML}
+      ${emergencyHTML}
+      ${appsHTML}
+    `;
+  }
+
+  // --- ME (checklist, presupuesto, packing, herramientas) --
+  function totalExpenses() {
+    return store.expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+  }
+  function overallProgress() {
+    const allKeys = DATA.days.flatMap(d => (d.timeline || []).map((_, idx) => `d${d.day}_t${idx}`));
+    if (!allKeys.length) return 0;
+    const done = allKeys.filter(k => store.checklist[k]).length;
+    return Math.round((done / allKeys.length) * 100);
+  }
+  function packingProgress() {
+    const groups = store.packing_custom || DATA.packing_list || {};
+    let total = 0, done = 0;
+    Object.keys(groups).forEach(cat => {
+      (groups[cat] || []).forEach((_, idx) => {
+        total++;
+        if (store.packing[`${cat}_${idx}`]) done++;
+      });
+    });
+    return total ? Math.round((done / total) * 100) : 0;
+  }
+
+  function renderMe() {
+    const tabs = [
+      { k: 'overview', l: 'Resumen' },
+      { k: 'budget', l: 'Presupuesto' },
+      { k: 'packing', l: 'Equipaje' },
+      { k: 'tools', l: 'Herramientas' }
+    ];
+
+    el('#page-me').innerHTML = `
+      <h2 class="section-title" style="margin-top:0">Mi viaje</h2>
+      <div class="me-tabs">
+        ${tabs.map(t => `<button class="me-tab ${t.k === 'overview' ? 'is-active' : ''}" data-me-tab="${t.k}">${t.l}</button>`).join('')}
+      </div>
+      <div class="me-pane is-active" data-me-pane="overview"></div>
+      <div class="me-pane" data-me-pane="budget"></div>
+      <div class="me-pane" data-me-pane="packing"></div>
+      <div class="me-pane" data-me-pane="tools"></div>
+    `;
+
+    document.querySelectorAll('[data-me-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.me-tab').forEach(b => b.classList.remove('is-active'));
+        document.querySelectorAll('.me-pane').forEach(p => p.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        document.querySelector(`[data-me-pane="${btn.dataset.meTab}"]`).classList.add('is-active');
+      });
+    });
+
+    renderMeOverview();
+    renderMeBudget();
+    renderMePacking();
+    renderMeTools();
+  }
+
+  function renderMeOverview() {
+    const progress = overallProgress();
+    const packProg = packingProgress();
+    const totalExp = totalExpenses();
+    const bdKeys_ov = ['flights', 'accommodation', 'transport', 'food', 'activities', 'shopping', 'other'];
+    const budget = store.budget_edit ? bdKeys_ov.reduce((s, k) => s + (store.budget_edit.breakdown[k] || 0), 0) : (DATA.meta.budget?.total_estimated || 0);
+    const curr = DATA.meta.currency || 'EUR';
+
+    const paneEl = document.querySelector('[data-me-pane="overview"]');
+    if (!paneEl) return;
+
+    paneEl.innerHTML = `
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card__value">${progress}%</div>
+          <div class="stat-card__label">Itinerario</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">${packProg}%</div>
+          <div class="stat-card__label">Equipaje</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">${fmtMoney(totalExp, curr)}</div>
+          <div class="stat-card__label">Gastado</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card__title">📊 Presupuesto</div>
+        <div class="budget-row">
+          <span class="budget-row__label">Estimado</span>
+          <span class="budget-row__value">${fmtMoney(budget, curr)}</span>
+        </div>
+        <div class="budget-row">
+          <span class="budget-row__label">Gastado</span>
+          <span class="budget-row__value">${fmtMoney(totalExp, curr)}</span>
+        </div>
+        <div class="budget-progress">
+          <div class="budget-progress__fill ${totalExp > budget ? 'is-over' : ''}" style="width:${Math.min(100, budget ? (totalExp/budget)*100 : 0)}%"></div>
+        </div>
+        <div class="budget-row" style="margin-top:10px">
+          <span class="budget-row__label">Restante</span>
+          <span class="budget-row__value" style="color:${totalExp > budget ? 'var(--c-danger)' : 'var(--c-success)'}">${fmtMoney(budget - totalExp, curr)}</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-card__title">☁️ Clima en destino</div>
+        <div id="weather-content" class="empty-state">Cargando…</div>
+      </div>
+    `;
+
+    loadWeather();
+  }
+
+  async function loadWeather() {
+    const w = document.getElementById('weather-content');
+    if (!w) return;
+    const om = DATA.overview_map;
+    if (!om) { w.textContent = 'Sin coordenadas.'; return; }
+    const start = DATA.meta.dates.start;
+    const end = DATA.meta.dates.end;
+
+    // Open-Meteo es gratis y no requiere API key
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${om.center.lat}&longitude=${om.center.lng}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${start}&end_date=${end}`;
+
+    try {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('fetch failed');
+      const j = await r.json();
+      if (!j.daily) { w.textContent = 'Previsión fuera de rango.'; return; }
+
+      const codes = {
+        0: '☀️', 1: '🌤', 2: '⛅', 3: '☁️',
+        45: '🌫', 48: '🌫',
+        51: '🌦', 53: '🌦', 55: '🌦',
+        61: '🌧', 63: '🌧', 65: '🌧',
+        71: '🌨', 73: '🌨', 75: '🌨',
+        80: '🌦', 81: '🌧', 82: '⛈',
+        95: '⛈', 96: '⛈', 99: '⛈'
+      };
+
+      const daysHTML = j.daily.time.map((t, i) => `
+        <div class="weather-day">
+          <div class="weather-day__date">${fmtDate(t, { weekday: 'short', day: 'numeric' })}</div>
+          <div class="weather-day__icon">${codes[j.daily.weather_code[i]] || '🌡'}</div>
+          <div class="weather-day__temp">${Math.round(j.daily.temperature_2m_max[i])}° <span class="weather-day__temp-min">${Math.round(j.daily.temperature_2m_min[i])}°</span></div>
+        </div>`).join('');
+      w.outerHTML = `<div class="weather-grid" id="weather-content">${daysHTML}</div>`;
+    } catch (e) {
+      w.textContent = 'Sin conexión para clima.';
+    }
+  }
+
+  function renderMeBudget() {
+    const paneEl = document.querySelector('[data-me-pane="budget"]');
+    if (!paneEl) return;
+    const curr = DATA.meta.currency || 'EUR';
+
+    // Inicializar desde DATA si no hay override guardado
+    if (!store.budget_edit) {
+      const bd = DATA.meta.budget?.breakdown || {};
+      store.budget_edit = {
+        breakdown: {
+          flights: bd.flights || 0,
+          accommodation: bd.accommodation || 0,
+          transport: bd.transport || 0,
+          food: bd.food || 0,
+          activities: bd.activities || 0,
+          shopping: bd.shopping || 0,
+          other: bd.other || 0
+        }
+      };
+    }
+    // Inicializar gastos compartidos si no existe
+    if (!store.split) {
+      store.split = { people: [], expenses: [] };
+    }
+
+    const be = store.budget_edit;
+    const bdLabels = { flights: 'Vuelos', accommodation: 'Alojamiento', transport: 'Transporte local', food: 'Comida', activities: 'Actividades', shopping: 'Compras', other: 'Otros' };
+    const bdKeys = ['flights', 'accommodation', 'transport', 'food', 'activities', 'shopping', 'other'];
+    // Total = suma de partidas (no editable directamente)
+    const budgetTotal = bdKeys.reduce((sum, k) => sum + (be.breakdown[k] || 0), 0);
+    const totalExp = totalExpenses();
+    const categories = ['Transporte', 'Alojamiento', 'Comida', 'Actividades', 'Compras', 'Otros'];
+
+    const budgetHTML = `
+      <div class="budget-summary">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:0 0 10px">Presupuesto estimado</div>
+        ${bdKeys.map(k => `
+          <div class="budget-row" style="margin-bottom:4px">
+            <span class="budget-row__label" style="font-size:13px">${bdLabels[k]}</span>
+            <div style="display:flex;align-items:center;gap:4px">
+              <input type="number" data-bd-key="${k}" value="${be.breakdown[k] || 0}" style="width:75px;padding:5px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--text);font-size:13px;text-align:right">
+              <span style="font-size:11px;color:var(--text-muted)">€</span>
+            </div>
+          </div>`).join('')}
+
+        <hr class="divider" style="margin:12px 0 10px">
+        <div class="budget-row">
+          <span class="budget-row__label" style="font-weight:700">Total presupuestado</span>
+          <span class="budget-row__value" id="budget-auto-total" style="font-size:20px">${fmtMoney(budgetTotal, curr)}</span>
+        </div>
+        <div class="budget-row" style="margin-top:6px">
+          <span class="budget-row__label">Gastado</span>
+          <span class="budget-row__value">${fmtMoney(totalExp, curr)}</span>
+        </div>
+        <div class="budget-progress">
+          <div class="budget-progress__fill ${totalExp > budgetTotal ? 'is-over' : ''}" style="width:${Math.min(100, budgetTotal ? (totalExp/budgetTotal)*100 : 0)}%"></div>
+        </div>
+        <div class="budget-row" style="margin-top:6px">
+          <span class="budget-row__label">Restante</span>
+          <span class="budget-row__value" style="color:${totalExp > budgetTotal ? 'var(--c-danger)' : 'var(--c-success)'}">${fmtMoney(budgetTotal - totalExp, curr)}</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:20px 0 8px">Añadir gasto</div>
+      <div class="expense-form">
+        <input id="exp-desc" placeholder="Concepto">
+        <input id="exp-amount" type="number" step="0.01" placeholder="€">
+        <select id="exp-cat">${categories.map(c => `<option>${c}</option>`).join('')}</select>
+        <button id="exp-add">+</button>
+      </div>
+      <ul class="expense-list" id="exp-list">
+        ${store.expenses.length === 0 ? '<li class="empty-state">Aún no has añadido gastos.</li>' : ''}
+        ${store.expenses.slice().reverse().map(e => `
+          <li class="expense-item">
+            <div>
+              <div class="expense-item__desc">${esc(e.desc)}</div>
+              <div class="expense-item__cat">${esc(e.category)}</div>
+            </div>
+            <span class="expense-item__amount">${fmtMoney(e.amount, curr)}</span>
+            <button class="expense-item__del" data-del="${e.id}">✕</button>
+          </li>`).join('')}
+      </ul>
+    `;
+
+    // --- Sección gastos compartidos ---
+    const sp = store.split;
+    const today = todayISO();
+
+    // Calcular balances netos: para cada gasto, cada beneficiario debe su parte proporcional
+    const balances = {}; // balance positivo = le deben, negativo = debe
+    sp.people.forEach(p => { balances[p] = 0; });
+    const splitGrandTotal = sp.expenses.reduce((s, e) => s + e.amount, 0);
+
+    sp.expenses.forEach(e => {
+      const beneficiaries = (e.forWhom && e.forWhom.length > 0) ? e.forWhom : sp.people;
+      const share = e.amount / beneficiaries.length;
+      // El pagador adelanta el total
+      balances[e.paidBy] = (balances[e.paidBy] || 0) + e.amount;
+      // Cada beneficiario "consume" su parte
+      beneficiaries.forEach(b => {
+        balances[b] = (balances[b] || 0) - share;
+      });
+    });
+
+    // Calcular transferencias mínimas para liquidar
+    function calcTransfers(bal) {
+      const debtors = []; // deben dinero (balance negativo)
+      const creditors = []; // les deben (balance positivo)
+      Object.keys(bal).forEach(p => {
+        const b = Math.round(bal[p] * 100) / 100;
+        if (b < -0.01) debtors.push({ name: p, amount: -b });
+        else if (b > 0.01) creditors.push({ name: p, amount: b });
+      });
+      // Ordenar de mayor a menor para minimizar transferencias
+      debtors.sort((a,b) => b.amount - a.amount);
+      creditors.sort((a,b) => b.amount - a.amount);
+
+      const transfers = [];
+      let di = 0, ci = 0;
+      while (di < debtors.length && ci < creditors.length) {
+        const pay = Math.min(debtors[di].amount, creditors[ci].amount);
+        if (pay > 0.01) {
+          transfers.push({ from: debtors[di].name, to: creditors[ci].name, amount: Math.round(pay * 100) / 100 });
+        }
+        debtors[di].amount -= pay;
+        creditors[ci].amount -= pay;
+        if (debtors[di].amount < 0.01) di++;
+        if (creditors[ci].amount < 0.01) ci++;
+      }
+      return transfers;
+    }
+
+    const transfers = sp.expenses.length > 0 ? calcTransfers({...balances}) : [];
+
+    // Cuánto ha pagado cada persona en total
+    const totalPaid = {};
+    sp.people.forEach(p => { totalPaid[p] = 0; });
+    sp.expenses.forEach(e => { totalPaid[e.paidBy] = (totalPaid[e.paidBy] || 0) + e.amount; });
+
+    // HTML de la sección
+    const splitHTML = `
+      <hr class="divider" style="margin:24px 0 16px">
+      <div class="tool-card" style="border:2px solid var(--accent);border-radius:var(--radius)">
+        <div class="tool-card__title">👥 Gastos compartidos</div>
+        <p style="font-size:12.5px;color:var(--text-soft);margin-bottom:12px">Añade viajeros, registra quién paga cada gasto y para quién es. Al final del viaje, verás quién debe pagar a quién.</p>
+
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px">Viajeros</div>
+        <div id="split-people" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+          ${sp.people.map((p, i) => `
+            <span style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:var(--bg-elev);border-radius:999px;font-size:13px;font-weight:600">
+              ${esc(p)}
+              <button data-rm-person="${i}" style="font-size:11px;color:var(--c-danger);opacity:0.6;cursor:pointer;background:none;border:none">✕</button>
+            </span>`).join('')}
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:16px">
+          <input id="split-new-person" placeholder="Nombre" style="flex:1;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px">
+          <button id="split-add-person" class="btn btn--primary btn--sm">Añadir</button>
+        </div>
+
+        ${sp.people.length >= 2 ? `
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px">Registrar pago</div>
+          <div style="display:grid;grid-template-columns:1fr 70px;gap:6px;margin-bottom:6px">
+            <input id="split-desc" placeholder="Concepto" style="padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px;min-width:0">
+            <input id="split-amount" type="number" step="0.01" placeholder="€" style="padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:6px;align-items:center">
+            <div>
+              <label style="font-size:11px;color:var(--text-muted);font-weight:600">Pagó</label>
+              <select id="split-who" style="width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px;margin-top:2px">
+                ${sp.people.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('')}
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;color:var(--text-muted);font-weight:600">Fecha</label>
+              <input id="split-date" type="date" value="${today}" style="width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px;margin-top:2px">
+            </div>
+            <button id="split-add-exp" class="btn btn--primary btn--sm" style="align-self:end;margin-bottom:1px">+</button>
+          </div>
+          <div style="margin-bottom:12px">
+            <label style="font-size:11px;color:var(--text-muted);font-weight:600">¿Para quién es este gasto?</label>
+            <div id="split-for-whom" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
+              ${sp.people.map(p => `
+                <label style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--bg-elev);border-radius:999px;font-size:12px;cursor:pointer;user-select:none">
+                  <input type="checkbox" value="${esc(p)}" checked style="accent-color:var(--accent);width:14px;height:14px">
+                  ${esc(p)}
+                </label>`).join('')}
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Por defecto, todos seleccionados = gasto del grupo.</div>
+          </div>
+
+          ${sp.expenses.length > 0 ? `
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:12px 0 6px">Historial de pagos</div>
+            <ul class="expense-list" style="margin-bottom:12px">
+              ${sp.expenses.slice().reverse().map((e, ri) => {
+                const idx = sp.expenses.length - 1 - ri;
+                const forLabel = (e.forWhom && e.forWhom.length > 0 && e.forWhom.length < sp.people.length)
+                  ? e.forWhom.join(', ')
+                  : 'todos';
+                return `
+                <li class="expense-item" style="grid-template-columns:1fr auto auto">
+                  <div>
+                    <div class="expense-item__desc">${esc(e.desc)}</div>
+                    <div class="expense-item__cat">Pagó: ${esc(e.paidBy)} · Para: ${esc(forLabel)} · ${esc(e.date || '')}</div>
+                  </div>
+                  <span class="expense-item__amount">${fmtMoney(e.amount, curr)}</span>
+                  <button class="expense-item__del" data-del-split="${idx}">✕</button>
+                </li>`;
+              }).join('')}
+            </ul>
+
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:12px 0 8px">Resumen</div>
+            <div style="background:var(--bg-elev);border-radius:var(--radius);padding:12px 14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;color:var(--text-soft)">
+                <span>Gasto total del grupo</span>
+                <span style="font-weight:700;color:var(--text)">${fmtMoney(splitGrandTotal, curr)}</span>
+              </div>
+              <hr class="divider" style="margin:6px 0 8px">
+              ${sp.people.map(p => {
+                const paid = totalPaid[p] || 0;
+                const bal = Math.round((balances[p] || 0) * 100) / 100;
+                const color = bal >= 0 ? 'var(--c-success)' : 'var(--c-danger)';
+                const label = bal > 0.01 ? `le deben ${fmtMoney(bal, curr)}` : bal < -0.01 ? `debe ${fmtMoney(-bal, curr)}` : 'saldado ✓';
+                return `
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-size:13px">
+                  <div>
+                    <span style="font-weight:700">${esc(p)}</span>
+                    <span style="color:var(--text-muted)"> · pagó ${fmtMoney(paid, curr)}</span>
+                  </div>
+                  <span style="font-weight:700;color:${color}">${label}</span>
+                </div>`;
+              }).join('')}
+
+              ${transfers.length > 0 ? `
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin:14px 0 6px">💸 Para liquidar</div>
+                ${transfers.map(t => `
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;border-bottom:1px dashed var(--line)">
+                    <span><strong>${esc(t.from)}</strong> paga a <strong>${esc(t.to)}</strong></span>
+                    <span style="font-weight:700;color:var(--accent)">${fmtMoney(t.amount, curr)}</span>
+                  </div>`).join('')}
+              ` : ''}
+            </div>
+          ` : '<div class="empty-state" style="padding:16px 0">Añade un pago para ver el resumen.</div>'}
+        ` : sp.people.length === 1 ? '<p style="font-size:13px;color:var(--text-muted)">Añade al menos 2 viajeros para usar los gastos compartidos.</p>' : ''}
+      </div>
+    `;
+
+    paneEl.innerHTML = budgetHTML + splitHTML;
+
+    // --- Listeners para partidas del presupuesto ---
+    document.querySelectorAll('[data-bd-key]').forEach(inp => {
+      inp.addEventListener('change', () => {
+        store.budget_edit.breakdown[inp.dataset.bdKey] = parseFloat(inp.value) || 0;
+        saveStore();
+        const newTotal = bdKeys.reduce((s, k) => s + (store.budget_edit.breakdown[k] || 0), 0);
+        const totalEl = document.getElementById('budget-auto-total');
+        if (totalEl) totalEl.textContent = fmtMoney(newTotal, curr);
+        renderMeOverview();
+      });
+    });
+
+    // --- Listeners para gastos personales ---
+    document.getElementById('exp-add').addEventListener('click', () => {
+      const desc = document.getElementById('exp-desc').value.trim();
+      const amount = parseFloat(document.getElementById('exp-amount').value);
+      const category = document.getElementById('exp-cat').value;
+      if (!desc || !amount || isNaN(amount)) return;
+      store.expenses.push({ id: 'e_' + Date.now(), desc, amount, category, date: todayISO() });
+      saveStore();
+      renderMeBudget();
+      renderMeOverview();
+    });
+    document.querySelectorAll('[data-del]').forEach(b => {
+      b.addEventListener('click', () => {
+        store.expenses = store.expenses.filter(e => e.id !== b.dataset.del);
+        saveStore();
+        renderMeBudget();
+        renderMeOverview();
+      });
+    });
+
+    // --- Listeners para gastos compartidos ---
+    const addPersonBtn = document.getElementById('split-add-person');
+    const newPersonInp = document.getElementById('split-new-person');
+    if (addPersonBtn) {
+      const doAddPerson = () => {
+        const name = newPersonInp.value.trim();
+        if (!name || store.split.people.includes(name)) return;
+        store.split.people.push(name);
+        saveStore();
+        renderMeBudget();
+      };
+      addPersonBtn.addEventListener('click', doAddPerson);
+      newPersonInp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doAddPerson(); } });
+    }
+
+    document.querySelectorAll('[data-rm-person]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.rmPerson);
+        const removed = store.split.people[idx];
+        store.split.people.splice(idx, 1);
+        store.split.expenses = store.split.expenses.filter(e => e.paidBy !== removed);
+        // También limpiar de forWhom
+        store.split.expenses.forEach(e => {
+          if (e.forWhom) e.forWhom = e.forWhom.filter(p => p !== removed);
+        });
+        saveStore();
+        renderMeBudget();
+      });
+    });
+
+    const addSplitBtn = document.getElementById('split-add-exp');
+    if (addSplitBtn) {
+      addSplitBtn.addEventListener('click', () => {
+        const desc = document.getElementById('split-desc').value.trim();
+        const amount = parseFloat(document.getElementById('split-amount').value);
+        const who = document.getElementById('split-who').value;
+        const date = document.getElementById('split-date').value || todayISO();
+        // Leer beneficiarios seleccionados
+        const checkboxes = document.querySelectorAll('#split-for-whom input[type="checkbox"]');
+        const forWhom = [];
+        checkboxes.forEach(cb => { if (cb.checked) forWhom.push(cb.value); });
+        if (!desc || !amount || isNaN(amount) || !who || forWhom.length === 0) {
+          if (forWhom.length === 0) alert('Selecciona al menos una persona como beneficiario del gasto.');
+          return;
+        }
+        store.split.expenses.push({ desc, amount, paidBy: who, forWhom, date });
+        saveStore();
+        renderMeBudget();
+      });
+    }
+
+    document.querySelectorAll('[data-del-split]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.delSplit);
+        store.split.expenses.splice(idx, 1);
+        saveStore();
+        renderMeBudget();
+      });
+    });
+  }
+
+  function getPackingData() {
+    // Si el usuario ha editado, usa la copia custom. Si no, parte de DATA.
+    if (store.packing_custom) return JSON.parse(JSON.stringify(store.packing_custom));
+    return JSON.parse(JSON.stringify(DATA.packing_list || {}));
+  }
+  function savePackingData(pl) {
+    store.packing_custom = pl;
+    saveStore();
+  }
+
+  function renderMePacking() {
+    const paneEl = document.querySelector('[data-me-pane="packing"]');
+    if (!paneEl) return;
+    const pl = getPackingData();
+    const labels = {
+      summer_clothing: '☀️ Ropa de verano', winter_clothing: '🧥 Ropa de invierno',
+      footwear: '👟 Calzado', underwear: '🩲 Ropa interior', items: '🎒 Objetos',
+      accessories: '🧢 Complementos', documents: '📄 Documentación',
+      toiletries: '🧴 Bolsa de aseo', health: '💊 Salud', other: '📦 Otros',
+      clothing: '👕 Ropa', tech: '🔌 Tecnología'
+    };
+    const preferredOrder = [
+      'summer_clothing', 'winter_clothing', 'clothing', 'footwear', 'underwear',
+      'items', 'tech', 'accessories', 'documents', 'toiletries', 'health', 'other'
+    ];
+    const orderedKeys = preferredOrder.filter(k => pl[k] && pl[k].length > 0).concat(
+      Object.keys(pl).filter(k => !preferredOrder.includes(k) && pl[k] && pl[k].length > 0)
+    );
+
+    if (orderedKeys.length === 0) {
+      paneEl.innerHTML = '<div class="empty-state">Sin lista de equipaje definida.</div>';
+      return;
+    }
+
+    paneEl.innerHTML = orderedKeys.map(cat => `
+      <div class="packing-group" data-cat="${cat}">
+        <div class="packing-group__title">${labels[cat] || '📦 ' + cat}</div>
+        ${(pl[cat] || []).map((item, idx) => {
+          const key = `${cat}_${idx}`;
+          const packed = !!store.packing[key];
+          return `
+            <div class="packing-item ${packed ? 'is-packed' : ''}" data-pack-key="${key}" data-cat="${cat}" data-idx="${idx}">
+              <span class="packing-item__box" data-action="toggle"></span>
+              <input class="packing-item__edit" type="text" value="${esc(item)}" data-action="rename">
+              <button class="packing-item__remove" data-action="remove" title="Eliminar">✕</button>
+            </div>`;
+        }).join('')}
+        <div class="packing-add-row">
+          <input class="packing-add-input" data-add-cat="${cat}" placeholder="Añadir item…" type="text">
+          <button class="packing-add-btn" data-add-btn="${cat}">+</button>
+        </div>
+      </div>`).join('') + `
+      <div style="margin-top:12px">
+        <button class="btn btn--ghost btn--sm" id="packing-reset" style="font-size:12px">↩ Restaurar lista original</button>
+      </div>`;
+
+    // Toggle check
+    paneEl.querySelectorAll('[data-action="toggle"]').forEach(box => {
+      box.addEventListener('click', () => {
+        const item = box.closest('[data-pack-key]');
+        const k = item.dataset.packKey;
+        store.packing[k] = !store.packing[k];
+        saveStore();
+        item.classList.toggle('is-packed');
+        renderMeOverview();
+      });
+    });
+
+    // Rename inline
+    paneEl.querySelectorAll('[data-action="rename"]').forEach(inp => {
+      inp.addEventListener('change', () => {
+        const item = inp.closest('[data-pack-key]');
+        const cat = item.dataset.cat;
+        const idx = parseInt(item.dataset.idx);
+        const plData = getPackingData();
+        if (plData[cat] && plData[cat][idx] !== undefined) {
+          plData[cat][idx] = inp.value.trim() || plData[cat][idx];
+          savePackingData(plData);
+        }
+      });
+    });
+
+    // Remove item
+    paneEl.querySelectorAll('[data-action="remove"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('[data-pack-key]');
+        const cat = item.dataset.cat;
+        const idx = parseInt(item.dataset.idx);
+        const plData = getPackingData();
+        if (plData[cat]) {
+          plData[cat].splice(idx, 1);
+          // Also clean packing checks for this category (re-index)
+          const newPacking = {};
+          Object.keys(store.packing).forEach(k => {
+            if (!k.startsWith(cat + '_')) newPacking[k] = store.packing[k];
+          });
+          (plData[cat] || []).forEach((_, i) => {
+            // preserve check state by old position if possible
+          });
+          store.packing = newPacking;
+          savePackingData(plData);
+          renderMePacking();
+          renderMeOverview();
+        }
+      });
+    });
+
+    // Add item
+    paneEl.querySelectorAll('[data-add-btn]').forEach(btn => {
+      const cat = btn.dataset.addBtn;
+      const inp = paneEl.querySelector(`[data-add-cat="${cat}"]`);
+      const doAdd = () => {
+        const val = inp.value.trim();
+        if (!val) return;
+        const plData = getPackingData();
+        if (!plData[cat]) plData[cat] = [];
+        plData[cat].push(val);
+        savePackingData(plData);
+        inp.value = '';
+        renderMePacking();
+        renderMeOverview();
+      };
+      btn.addEventListener('click', doAdd);
+      inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doAdd(); } });
+    });
+
+    // Reset to original
+    document.getElementById('packing-reset')?.addEventListener('click', () => {
+      if (confirm('¿Restaurar la lista original? Se perderán los cambios que hayas hecho.')) {
+        store.packing_custom = null;
+        store.packing = {};
+        saveStore();
+        renderMePacking();
+        renderMeOverview();
+      }
+    });
+  }
+
+  function renderMeTools() {
+    const paneEl = document.querySelector('[data-me-pane="tools"]');
+    if (!paneEl) return;
+
+    // Detectar moneda local del destino: primero local_currency, luego currency si no es EUR, luego nada
+    const homeCurr = 'EUR';
+    const rawCurr = DATA.meta.local_currency || DATA.meta.currency || 'EUR';
+    const destCurr = rawCurr === homeCurr ? null : rawCurr;
+
+    const converterHTML = !destCurr ? '' : `
+      <div class="tool-card">
+        <div class="tool-card__title">💱 Conversor EUR ↔ ${esc(destCurr)}</div>
+
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em">EUR → ${esc(destCurr)}</div>
+        <div class="tool-card__row" style="margin-bottom:4px">
+          <input id="conv-eur" type="number" placeholder="Euros" value="100">
+          <div style="align-self:center;font-weight:700;font-size:14px;color:var(--accent)">EUR</div>
+        </div>
+        <div class="tool-card__result" id="conv-result-fwd">—</div>
+
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin:12px 0 4px;text-transform:uppercase;letter-spacing:0.06em">${esc(destCurr)} → EUR</div>
+        <div class="tool-card__row" style="margin-bottom:4px">
+          <input id="conv-local" type="number" placeholder="${esc(destCurr)}" value="">
+          <div style="align-self:center;font-weight:700;font-size:14px;color:var(--accent)">${esc(destCurr)}</div>
+        </div>
+        <div class="tool-card__result" id="conv-result-rev">—</div>
+
+        <small id="conv-rate" style="display:block;margin-top:8px;color:var(--text-muted);font-size:11px"></small>
+      </div>`;
+
+    paneEl.innerHTML = `
+      ${converterHTML}
+
+      <div class="tool-card">
+        <div class="tool-card__title">📤 Compartir esta guía</div>
+        <p style="font-size:13px;color:var(--text-soft);margin-bottom:12px">Comparte el enlace de tu guía por WhatsApp, email o redes sociales.</p>
+        <button class="btn btn--primary" onclick="navigator.share ? navigator.share({title: document.title, text: 'Mira mi guía de viaje', url: location.href}).catch(()=>{}) : alert('Copia la URL del navegador y compártela')">Compartir</button>
+      </div>
+    `;
+
+    if (destCurr) {
+      const eurInput = document.getElementById('conv-eur');
+      const localInput = document.getElementById('conv-local');
+      const resFwd = document.getElementById('conv-result-fwd');
+      const resRev = document.getElementById('conv-result-rev');
+      const rateEl = document.getElementById('conv-rate');
+      let cachedRate = null;
+
+      async function fetchRate() {
+        if (cachedRate) return cachedRate;
+        // Intentar con open.er-api.com (gratis, sin key, fiable)
+        try {
+          const r = await fetch('https://open.er-api.com/v6/latest/EUR');
+          const j = await r.json();
+          if (j.result === 'success' && j.rates && j.rates[destCurr]) {
+            cachedRate = j.rates[destCurr];
+            rateEl.textContent = '1 EUR = ' + cachedRate.toFixed(4) + ' ' + destCurr + ' (actualizado ' + (j.time_last_update_utc || 'hoy').split(' ').slice(0,4).join(' ') + ')';
+            return cachedRate;
+          }
+        } catch (e) {}
+        // Fallback: exchangerate.host
+        try {
+          const r2 = await fetch('https://api.exchangerate.host/latest?base=EUR&symbols=' + destCurr);
+          const j2 = await r2.json();
+          if (j2.rates && j2.rates[destCurr]) {
+            cachedRate = j2.rates[destCurr];
+            rateEl.textContent = '1 EUR = ' + cachedRate.toFixed(4) + ' ' + destCurr;
+            return cachedRate;
+          }
+        } catch (e) {}
+        rateEl.textContent = 'Sin conexión para obtener tasas';
+        return null;
+      }
+
+      async function convertFwd() {
+        const a = parseFloat(eurInput.value) || 0;
+        const rate = await fetchRate();
+        if (rate) {
+          const result = a * rate;
+          resFwd.textContent = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 }).format(result) + ' ' + destCurr;
+        } else {
+          resFwd.textContent = 'Error';
+        }
+      }
+      async function convertRev() {
+        const a = parseFloat(localInput.value) || 0;
+        const rate = await fetchRate();
+        if (rate) {
+          const result = a / rate;
+          resRev.textContent = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(result);
+        } else {
+          resRev.textContent = 'Error';
+        }
+      }
+
+      eurInput.addEventListener('input', convertFwd);
+      localInput.addEventListener('input', convertRev);
+      convertFwd();
+    }
+  }
+
+  // ------------------------------------------------------
+  // 5. ACCIONES GLOBALES
+  // ------------------------------------------------------
+  window.__actions = {
+    toggleChecklist(key) {
+      store.checklist[key] = !store.checklist[key];
+      saveStore();
+      const item = document.querySelector(`[data-key="${key}"]`);
+      if (item) item.classList.toggle('is-done');
+    }
+  };
+
+  // ------------------------------------------------------
+  // 6. NAVEGACIÓN
+  // ------------------------------------------------------
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('is-active'));
+    el('#page-' + id).classList.add('is-active');
+    window.scrollTo(0, 0);
+
+    document.querySelectorAll('.tabbar__item').forEach(b => {
+      b.classList.toggle('is-active', b.dataset.tab === id || (id === 'day' && b.dataset.tab === 'days'));
+    });
+
+    // (Re)renderizar contenido según la página
+    switch (id) {
+      case 'home': renderHome(); break;
+      case 'days': renderDaysList(); el('#header-title').textContent = 'Itinerario'; break;
+      case 'map':  renderMap(); el('#header-title').textContent = 'Mapa'; break;
+      case 'tips': renderTips(); el('#header-title').textContent = 'Consejos'; break;
+      case 'me':   renderMe(); el('#header-title').textContent = 'Mi viaje'; break;
+    }
+  }
+
+  window.__nav = {
+    go(id) { showPage(id); },
+    goDay(n) { renderDay(n); showPage('day'); }
+  };
+
+  document.querySelectorAll('.tabbar__item').forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.dataset.tab));
+  });
+
+  // ------------------------------------------------------
+  // 7. BUSCADOR GLOBAL
+  // ------------------------------------------------------
+  function buildSearchIndex() {
+    const idx = [];
+    DATA.days.forEach(d => {
+      idx.push({ type: 'Día', title: `Día ${d.day}: ${d.title}`, snippet: DATA.summary.find(s => s.day === d.day)?.summary || '', action: () => window.__nav.goDay(d.day) });
+      (d.timeline || []).forEach(t => idx.push({ type: `Día ${d.day}`, title: `${t.time} · ${t.title}`, snippet: t.description, action: () => window.__nav.goDay(d.day) }));
+      (d.places || []).forEach(p => idx.push({ type: `Día ${d.day} · Lugar`, title: p.name, snippet: p.review || '', action: () => window.__nav.goDay(d.day) }));
+      (d.restaurants || []).forEach(r => idx.push({ type: `Día ${d.day} · Restaurante`, title: r.name, snippet: r.speciality || '', action: () => window.__nav.goDay(d.day) }));
+    });
+    (DATA.practical_tips || []).forEach(g => {
+      (g.items || []).forEach(i => idx.push({ type: `Consejo · ${g.title}`, title: i.subtitle, snippet: i.text, action: () => window.__nav.go('tips') }));
+    });
+    return idx;
+  }
+
+  const searchIndex = buildSearchIndex();
+  const searchOverlay = el('#search-overlay');
+  const searchInput = el('#search-input');
+  const searchResults = el('#search-results');
+
+  el('#btn-search').addEventListener('click', () => {
+    searchOverlay.classList.add('is-open');
+    searchInput.value = '';
+    searchResults.innerHTML = '';
+    setTimeout(() => searchInput.focus(), 60);
+  });
+  el('#search-close').addEventListener('click', () => searchOverlay.classList.remove('is-open'));
+
+  function normalize(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+
+  searchInput.addEventListener('input', () => {
+    const q = normalize(searchInput.value.trim());
+    if (q.length < 2) { searchResults.innerHTML = ''; return; }
+    const matches = searchIndex
+      .map(it => ({ it, score: (normalize(it.title).includes(q) ? 2 : 0) + (normalize(it.snippet).includes(q) ? 1 : 0) }))
+      .filter(x => x.score > 0)
+      .sort((a,b) => b.score - a.score)
+      .slice(0, 30);
+    searchResults.innerHTML = matches.length
+      ? matches.map((m, i) => `
+          <div class="search-result" data-sr="${i}">
+            <div class="search-result__type">${esc(m.it.type)}</div>
+            <div class="search-result__title">${esc(m.it.title)}</div>
+            <div class="search-result__snippet">${esc(m.it.snippet)}</div>
+          </div>`).join('')
+      : '<div class="empty-state">Sin resultados.</div>';
+    searchResults.querySelectorAll('[data-sr]').forEach(n => {
+      n.addEventListener('click', () => {
+        const m = matches[Number(n.dataset.sr)];
+        searchOverlay.classList.remove('is-open');
+        m.it.action();
+      });
+    });
+  });
+
+  // ------------------------------------------------------
+  // 8. ARRANQUE
+  // ------------------------------------------------------
+  showPage('home');
+
+})();
+</script>
+
+</body>
+</html>
